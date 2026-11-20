@@ -1,0 +1,267 @@
+# =============================================================================
+# PILOT PROTOCOL CONFIGURATION — Stage 5
+# Protocol version: pilot-v1.0 (design frozen at Stage 4; technical pins resolved)
+# =============================================================================
+# DESIGN FROZEN: experimental rules, shared controls, budgets, and metrics.
+# TECHNICAL CONFIGURATION: embedding model, tokenizer, chunking, and index IDs
+# are pinned here after Stage 5 verification. Do not retune chunking based on
+# which retrieval method performs better.
+#
+# These are predetermined pilot settings, NOT experimentally optimized.
+# Engineering-driven changes require a new protocol version before main runs.
+# =============================================================================
+
+meta:
+  stage: "6"
+  protocol_version: "pilot-v1.0"
+  status: design_frozen_methods_implemented
+  design_frozen: true
+  config_frozen: true  # Design/protocol freeze remains. Technical pins from Stage 5–6.
+  technical_configuration_status: configured_stage_5
+  notes: >
+    Stage 4 froze the controlled comparison protocol. Stage 5 resolved embeddings
+    and indexes. Stage 6 implements Method A/B orchestration and OpenRouter chat;
+    the 12 pilot trial records remain Stage 7.
+
+research:
+  topic: "Repository-Level Context for Coding Agents"
+  question: >
+    Does agent-directed code search outperform one-shot code RAG for
+    repository-level software engineering tasks?
+  primary_outcome: retrieval_quality
+  primary_outcome_object: final_evidence_pack
+  primary_metric: file_f1
+  independent_variable: search_strategy
+  # Downstream code-implementation success is out of scope for the primary outcome.
+
+repository:
+  name: pi
+  url: "https://github.com/earendil-works/pi"
+  corpus_scope: full_monorepo
+  snapshot_policy: task_specific_pre_change
+  local_clone_path_example: "C:/Users/froze/Desktop/pi-upstream"
+  pilot_worktrees:
+    pi_lazy_extension_loading: "C:/Users/froze/Desktop/pi-task-lazy"
+    pi_package_filtering: "C:/Users/froze/Desktop/pi-task-packages"
+
+pilot:
+  task_count: 2
+  task_ids:
+    - pi_lazy_extension_loading
+    - pi_package_filtering
+  annotation_status: preliminary_self_validated
+  total_pilot_records: 12  # 2 tasks × 2 methods × 3 repetitions
+
+budgets:
+  evidence_token_budget: 6000
+  agent_tool_call_limit: 5
+  # One-shot: final pack ≤ 6000.
+  # Agent: ALL repository excerpts from semantic_search/read_file/find_symbol/grep
+  # count cumulatively toward 6000 (repeats count again). Final pack also ≤ 6000.
+  evidence_accounting:
+    count_repeated_excerpts: true
+    task_prompt_counts_as_evidence: false
+    separate_planning_tokens: true
+  tracked_token_fields:
+    - cumulative_evidence_tokens
+    - unique_evidence_tokens
+    - final_evidence_pack_tokens
+    - agent_planning_input_tokens
+    - agent_output_tokens
+    - provider_reported_usage
+    - api_cost
+    - corpus_indexing_embedding_tokens
+    - query_time_embedding_tokens
+
+execution:
+  mode: paired_trials
+  repetitions: 3
+  methods_per_task: 2
+  expected_records: 12
+  temperature: 0
+  seed_policy: predetermined_per_run
+  seed: null  # Set per-run when provider/runtime supports seeding; record actual seed in logs.
+  balanced_execution_order: true
+  # Predetermined balanced order (record actual order in run logs):
+  # For each task, for each repetition r in 1..3: run Method A then Method B
+  # with shared paired_trial_id = "{task_id}__r{r}".
+  paired_trial_id_template: "{task_id}__r{repetition}"
+  run_one_shot_even_if_deterministic: true
+
+retrieval:
+  owner: experimental_design
+  implementation_origin: independent
+  backend: local_numpy_cosine
+  backend_status: implemented_stage_5
+  embedding_provider: openrouter
+  embedding_endpoint: "https://openrouter.ai/api/v1/embeddings"
+  embedding_model: openai/text-embedding-3-small
+  embedding_model_revision: openai/text-embedding-3-small
+  embedding_dimension: 1536  # Validated at live probe; rebuild confirms actual dims.
+  tokenizer: cl100k_base
+  index_name: numpy_cosine_normalized
+  index_build_id: per_snapshot  # See artifacts/indexes/<sha12>/meta.json
+  chunking_version: pilot-v1.0-chunker-1
+  top_k: 10
+  max_tokens_per_search: 6000
+  bm25_smoke_test_only: true
+  protocol: "search(query, top_k, max_tokens) -> list[RetrievedChunk]"
+  shared_by_methods: true
+  initial_query_policy: exact_task_prompt  # Both methods; Method A must NOT LLM-rewrite the query.
+
+chunking:
+  owner: experimental_design
+  implementation_origin: independent
+  strategy: symbol_aware_with_line_fallback
+  max_chunk_tokens: 800
+  overlap_tokens: 100
+  tokenizer: cl100k_base
+  version: pilot-v1.0-chunker-1
+  status: configured_stage_5
+  file_exclusions:
+    - .git
+    - node_modules
+    - dist
+    - build
+    - caches
+    - binaries
+    - vendored_dependencies
+  notes: >
+    Initial settings validated against Pi source before indexing. Do not retune
+    based on Method A vs B retrieval scores.
+
+models:
+  # Credentials exclusively via environment variables — never in this file.
+  llm_adapter: env_based
+  agent_dry_run_is_plumbing_only: true
+  # Stage 5 uses embeddings only. Chat models reserved for Stage 6.
+  agent_llm:
+    provider: openrouter
+    model: openai/gpt-6-luna
+    model_version: openai/gpt-6-luna
+    endpoint_env: OPENROUTER_BASE_URL
+    api_key_env: OPENROUTER_API_KEY
+    model_env: OPENROUTER_PRIMARY_CHAT_MODEL
+    temperature: 0
+    max_output_tokens: 4096  # Technical Stage 6 setting; separate from evidence budget
+    system_prompt_version: pilot-v1.0-agent-system-1
+    status: configured_stage_6
+  secondary_llm:
+    provider: openrouter
+    model: openrouter/free
+    notes: >
+      Optional exploratory model only. Must not auto-replace primary.
+      Record actual served model; keep results separate from primary experiment.
+    status: exploratory_only_not_primary
+  embedding:
+    provider: openrouter
+    identifier: openai/text-embedding-3-small
+    revision: openai/text-embedding-3-small
+    dimension: 1536
+    tokenizer: cl100k_base
+    api_key_env: OPENROUTER_API_KEY
+    base_url_env: OPENROUTER_BASE_URL
+    endpoint: /embeddings
+
+methods:
+  method_a:
+    name: one_shot_code_rag
+    status: implemented_stage_6
+    orchestration_owner: experimental_design
+    retriever: shared
+    steps:
+      - receive_identical_task_prompt
+      - use_exact_task_prompt_as_retrieval_query
+      - perform_exactly_one_semantic_retrieval
+      - deduplicate_and_rank
+      - return_final_evidence_pack
+      - stop
+    max_semantic_search_calls: 1
+    allow_llm_query_rewrite: false
+    allow_file_inspection_tools: false
+  method_b:
+    name: agent_directed_code_search
+    status: implemented_stage_6
+    orchestration_owner: experimental_design
+    retriever: shared
+    steps:
+      - receive_identical_task_prompt
+      - initial_semantic_search_with_exact_task_prompt
+      - llm_inspect_refine_and_optional_readonly_tools
+      - return_ranked_evidence_pack_and_trace
+    max_total_repository_tool_calls: 5
+    counted_tools:
+      - semantic_search
+      - read_file
+      - find_symbol
+      - grep
+    forbidden:
+      - modify_repository
+      - unrestricted_shell
+      - access_git_history
+      - access_evaluator_only_annotations
+    stopping_reasons:
+      - evidence_sufficient
+      - no_new_relevant_evidence
+      - call_limit_reached
+      - evidence_budget_exhausted
+      - tool_or_model_error
+
+shared_controls:
+  - repository_snapshots
+  - indexed_corpus
+  - file_exclusions
+  - chunking_configuration
+  - embedding_model_and_revision
+  - retrieval_backend
+  - tokenizer
+  - initial_task_prompt
+  - evidence_token_budget
+  - ground_truth_annotations
+  - evaluation_procedure
+
+evaluation:
+  primary_owner: experimental_design
+  secondary_owner: teammate_3_optional
+  independent_without_teammates: true
+  ground_truth_access: evaluator_only
+  same_annotations_for_both_methods: true
+  primary_metric: file_f1
+  primary_outcome_object: final_evidence_pack
+  secondary_outcome_object: cumulative_unique_evidence_exposure
+  relevance_scores:
+    essential: 2
+    supporting: 1
+    irrelevant: 0
+  file_dedup_rule: unique_paths_only  # Multiple chunks from one file = one file
+  primary_metrics:
+    - file_f1
+  secondary_metrics:
+    - file_precision
+    - file_recall
+    - essential_file_recall
+    - mean_reciprocal_rank
+    - ndcg
+  efficiency_metrics:
+    - evidence_tokens
+    - agent_planning_tokens
+    - tool_call_count
+    - latency_ms
+    - api_cost
+    - new_relevant_files_from_additional_searches
+    - diminishing_returns
+  reporting:
+    - task_level_comparisons
+    - aggregate_comparisons
+    - repetition_variance
+  prohibitions:
+    - no_statistical_significance_claims_from_two_task_pilot
+    - no_equating_more_material_with_better_quality
+    - no_broad_generalization_from_pilot
+
+outputs:
+  raw_jsonl: results/raw/runs.jsonl
+  processed_csv: results/processed/trials.csv
+  schema: schemas/experiment_run.schema.json
+  protocol_doc: docs/protocol_freeze.md
+  corpus_doc: docs/corpus_and_retrieval.md

@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.0",
+  "repository": {
+    "name": "pi",
+    "url": "https://github.com/earendil-works/pi"
+  },
+  "notes": [
+    "Statuses are split: snapshot_verification_status, task_validation_status, benchmark_acceptance_status.",
+    "Stage 3 completed preliminary pilots A/B only (preliminary_self_validated).",
+    "Candidate E remains verification_failed / unresolved.",
+    "Candidates C/D flagged for package-management overlap; no full GT in Stage 3.",
+    "Target/parent SHAs and ground truth are evaluator-only — not in agent-visible tasks.json fields.",
+    "32bcdc9 remains advanced reserve only."
+  ],
+  "primary_candidates": [
+    {
+      "letter_id": "A",
+      "task_id": "pi_lazy_extension_loading",
+      "target_commit": "40c256c",
+      "known_parent_prefix": "bfa6862",
+      "focus": "Lazy extension loading",
+      "status": "pilot",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3: preliminary_self_validated task prompt + GT authored independently. Not teammate-reviewed.",
+      "outstanding_checks": [
+        "Confirm task description neutrality",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "verified_target_sha": "40c256cccbce062f6af5f2cacb85d0ce1ab4224d",
+      "verified_parent_sha": "bfa6862400d0aaa3ebf3c09a44a2479487f470f1",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "preliminary_self_validated",
+      "benchmark_acceptance_status": "pilot_accepted_preliminary"
+    },
+    {
+      "letter_id": "B",
+      "task_id": "pi_package_filtering",
+      "target_commit": "ef1fc31",
+      "known_parent_prefix": "dd838d0",
+      "focus": "Package configuration and filtering",
+      "status": "pilot",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3: preliminary_self_validated task prompt + GT authored independently. Not teammate-reviewed.",
+      "outstanding_checks": [
+        "Confirm task description neutrality",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "verified_target_sha": "ef1fc3103ee869244800f301993bd4952125db78",
+      "verified_parent_sha": "dd838d0fe09db079dcf2f57bab1d79d4df5a0e4c",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "preliminary_self_validated",
+      "benchmark_acceptance_status": "pilot_accepted_preliminary"
+    },
+    {
+      "letter_id": "C",
+      "task_id": "pi_package_progress_conflicts",
+      "target_commit": "4058680",
+      "known_parent_prefix": "b846a4b",
+      "focus": "Package progress and conflict detection",
+      "status": "candidate",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred. Package-management overlap watch with D.",
+      "outstanding_checks": [
+        "Review overlap with candidate D",
+        "Draft neutral task prompt",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "overlap_flag": {
+        "related_candidates": [
+          "D"
+        ],
+        "reason": "Related package-management development effort; potential task/context overlap requires later review."
+      },
+      "verified_target_sha": "4058680d225535d25705aaf02644957c0ed7a096",
+      "verified_parent_sha": "b846a4bfcf168ae218dbeb0fecc24a98c0b3e332",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "not_started",
+      "benchmark_acceptance_status": "candidate_reserved"
+    },
+    {
+      "letter_id": "D",
+      "task_id": "pi_package_dedup_collisions",
+      "target_commit": "50c8323",
+      "known_parent_prefix": "c5c515f",
+      "focus": "Package deduplication and collisions",
+      "status": "candidate",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred. Package-management overlap watch with C.",
+      "outstanding_checks": [
+        "Review overlap with candidate C",
+        "Draft neutral task prompt",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "overlap_flag": {
+        "related_candidates": [
+          "C"
+        ],
+        "reason": "Related package-management development effort; potential task/context overlap requires later review."
+      },
+      "verified_target_sha": "50c83235904bb24e8d634cc25f7f761ec1324e98",
+      "verified_parent_sha": "c5c515f56096f212e0ad1e7f5c3c9b115908d37c",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "not_started",
+      "benchmark_acceptance_status": "candidate_reserved"
+    },
+    {
+      "letter_id": "E",
+      "task_id": "pi_network_retry",
+      "target_commit": "37067e0",
+      "known_parent_prefix": "4860665",
+      "focus": "Network retry handling",
+      "status": "candidate",
+      "validation_status": "verification_failed",
+      "notes": "Stage 2: target commit 37067e0 not found. Remains verification_failed. No Stage 3 task/GT work.",
+      "outstanding_checks": [
+        "Obtain resolvable full target SHA from Teammate 2 / maintainers",
+        "Re-run scripts/verify_benchmark.py",
+        "Do not mark verified until object exists and parent prefix matches"
+      ],
+      "snapshot_verification_status": "verification_failed",
+      "task_validation_status": "not_started",
+      "benchmark_acceptance_status": "blocked_unresolved_snapshot"
+    },
+    {
+      "letter_id": "F",
+      "task_id": "pi_rpc_context_statistics",
+      "target_commit": "835296b1d7d999100ee1c465b4958031d0bb5adc",
+      "known_parent_prefix": "9a0be02",
+      "focus": "RPC context statistics",
+      "status": "candidate",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred; reserved for future expansion.",
+      "outstanding_checks": [
+        "Draft neutral task prompt",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "verified_target_sha": "835296b1d7d999100ee1c465b4958031d0bb5adc",
+      "verified_parent_sha": "9a0be024a6ff381362e04b19dd1c155c44675f4a",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "not_started",
+      "benchmark_acceptance_status": "candidate_reserved"
+    },
+    {
+      "letter_id": "G",
+      "task_id": "pi_session_directory_config",
+      "target_commit": "8191d59c170c9bb336a82771e1826d25bb7ec1e0",
+      "known_parent_prefix": "8632e1b",
+      "focus": "Session directory configuration",
+      "status": "candidate",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred; reserved for future expansion.",
+      "outstanding_checks": [
+        "Draft neutral task prompt",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "verified_target_sha": "8191d59c170c9bb336a82771e1826d25bb7ec1e0",
+      "verified_parent_sha": "8632e1b9484b9be62e8fc9b31757176f7c560313",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "not_started",
+      "benchmark_acceptance_status": "candidate_reserved"
+    },
+    {
+      "letter_id": "H",
+      "task_id": "pi_cli_mode_validation",
+      "target_commit": "e40126f578ccc0a4a21f8d30cd8e96c8ecfe1722",
+      "known_parent_prefix": "1a584a7",
+      "focus": "CLI mode validation",
+      "status": "candidate",
+      "validation_status": "verified",
+      "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred; reserved for future expansion.",
+      "outstanding_checks": [
+        "Draft neutral task prompt",
+        "Confirm test availability on pre-change snapshot"
+      ],
+      "verified_target_sha": "e40126f578ccc0a4a21f8d30cd8e96c8ecfe1722",
+      "verified_parent_sha": "1a584a7a56eb5e7b4ff8ccbd46430f1533282eed",
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "not_started",
+      "benchmark_acceptance_status": "candidate_reserved"
+    }
+  ],
+  "advanced_reserve": [
+    {
+      "letter_id": "R1",
+      "task_id": "pi_advanced_reserve_32bcdc9",
+      "target_commit": "32bcdc9",
+      "known_parent_prefix": null,
+      "focus": "Advanced reserve — reported CI issue requires investigation before acceptance",
+      "status": "advanced_reserve",
+      "validation_status": "unverified",
+      "notes": "NOT one of the eight primary candidates. Separate advanced reserve. Do not include in the primary pilot or candidate set until the reported CI issue is investigated and the task is explicitly accepted.",
+      "outstanding_checks": [
+        "Investigate reported CI issue",
+        "Resolve and verify full target SHA",
+        "Identify and verify parent (pre-change) SHA",
+        "Decide accept/reject for future expansion",
+        "If accepted: draft neutral task prompt and ground-truth plan"
+      ]
+    }
+  ]
+}

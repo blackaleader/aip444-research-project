@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.research/schemas/experiment_run.schema.json",
+  "title": "ExperimentRunRecord",
+  "description": "One JSONL line written by EXP experiment logger for Teammate 3 comparative evaluation. Ground-truth content is not embedded as agent input; evaluators join on task_id/snapshot_id.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "record_type",
+    "task_id",
+    "paired_trial_id",
+    "method",
+    "repetition",
+    "snapshot_id",
+    "index_id",
+    "evidence_pack",
+    "evidence_tokens",
+    "planning_tokens",
+    "tool_call_count",
+    "latency_ms",
+    "stop_reason"
+  ],
+  "properties": {
+    "record_type": {
+      "type": "string",
+      "const": "experiment_trial"
+    },
+    "task_id": { "type": "string" },
+    "paired_trial_id": {
+      "type": "string",
+      "description": "Shared ID pairing Method A and Method B trials for the same task/repetition."
+    },
+    "method": {
+      "type": "string",
+      "enum": ["one_shot_rag", "agent_directed"]
+    },
+    "repetition": { "type": "integer", "minimum": 1 },
+    "snapshot_id": { "type": "string" },
+    "index_id": { "type": "string" },
+    "config_hash": { "type": "string" },
+    "evidence_pack": {
+      "type": "array",
+      "description": "Final ranked evidence pack (primary retrieval-quality outcome).",
+      "items": {
+        "type": "object",
+        "required": ["chunk_id", "path", "start_line", "end_line", "token_count", "rank"],
+        "properties": {
+          "chunk_id": { "type": "string" },
+          "path": { "type": "string" },
+          "symbol": { "type": ["string", "null"] },
+          "start_line": { "type": "integer" },
+          "end_line": { "type": "integer" },
+          "token_count": { "type": "integer" },
+          "score": { "type": "number" },
+          "rank": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "cumulative_unique_evidence": {
+      "type": "object",
+      "description": "Cumulative unique evidence exposure across the trial (separate from final pack).",
+      "properties": {
+        "unique_files": { "type": "array", "items": { "type": "string" } },
+        "unique_chunk_ids": { "type": "array", "items": { "type": "string" } },
+        "total_evidence_tokens_supplied": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "iteration_traces": {
+      "type": "array",
+      "description": "Method B (and optional Method A single step) retrieval iterations.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "iteration": { "type": "integer", "minimum": 1 },
+          "query": { "type": "string" },
+          "tool_name": { "type": "string" },
+          "retrieved_chunk_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "newly_discovered_relevant_files": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Filled at evaluation time when joined with GT; may be empty in raw logs."
+          }
+        }
+      }
+    },
+    "relevance_annotation_ref": {
+      "type": "object",
+      "description": "Pointer to evaluator-only GT used later; not agent-visible content.",
+      "properties": {
+        "ground_truth_path": { "type": "string" },
+        "task_id": { "type": "string" }
+      }
+    },
+    "evidence_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Tokens in final evidence pack and/or counted repository excerpts per protocol."
+    },
+    "planning_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Agent planning/reasoning tokens, recorded separately from evidence tokens."
+    },
+    "tool_call_count": { "type": "integer", "minimum": 0 },
+    "latency_ms": { "type": "number", "minimum": 0 },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "stop_reason": {
+      "type": "string",
+      "description": "e.g. completed | tool_limit | evidence_budget | error | cancelled"
+    }
+  }
+}

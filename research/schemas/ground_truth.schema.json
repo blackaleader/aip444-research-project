@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.research/schemas/ground_truth.schema.json",
+  "title": "GroundTruthAnnotation",
+  "description": "Evaluator-only annotation. Must never be passed to Method A or Method B inputs.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "task_id",
+    "snapshot_sha",
+    "annotation_version",
+    "review_status",
+    "required_files",
+    "files",
+    "relevant_symbols",
+    "relevant_spans",
+    "existing_tests",
+    "target_added_tests",
+    "annotation_notes"
+  ],
+  "properties": {
+    "task_id": { "type": "string" },
+    "snapshot_sha": { "type": "string", "minLength": 40 },
+    "annotation_version": { "type": "string" },
+    "review_status": {
+      "type": "string",
+      "enum": ["preliminary_self_validated", "validated", "rejected"]
+    },
+    "required_files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "relevance", "relevance_score", "rationale", "symbols", "line_spans"],
+        "properties": {
+          "path": { "type": "string" },
+          "relevance": { "type": "string", "enum": ["essential", "supporting", "irrelevant"] },
+          "relevance_score": { "type": "integer", "enum": [0, 1, 2] },
+          "rationale": { "type": "string" },
+          "symbols": { "type": "array", "items": { "type": "string" } },
+          "line_spans": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["start_line", "end_line"],
+              "properties": {
+                "start_line": { "type": "integer", "minimum": 1 },
+                "end_line": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "relevant_symbols": { "type": "array" },
+    "relevant_spans": { "type": "array" },
+    "existing_tests": { "type": "array", "items": { "type": "string" } },
+    "target_added_tests": { "type": "array", "items": { "type": "string" } },
+    "target_added_files_not_retrievable": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "excluded_changed_files": { "type": "array" },
+    "annotation_notes": { "type": "array", "items": { "type": "string" } }
+  }
+}

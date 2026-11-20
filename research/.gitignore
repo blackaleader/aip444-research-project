@@ -1,0 +1,64 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment secrets — keep .env.example tracked
+.env
+.env.local
+.env.*.local
+
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Local Pi repository clones (never commit upstream source trees)
+data/pi_repo/
+data/pi_snapshots/
+**/pi_clone/
+
+# Generated corpus and indexes (reproducible via scripts; do not commit binaries)
+data/chunks/**
+!data/chunks/.gitkeep
+data/indexes/**
+!data/indexes/.gitkeep
+artifacts/**
+!artifacts/.gitkeep
+
+# Experimental outputs (raw logs, processed tables, generated charts)
+results/raw/**
+!results/raw/.gitkeep
+results/processed/**
+!results/processed/.gitkeep
+results/charts/**
+!results/charts/.gitkeep
+
+# Keep findings.md tracked (human-written summary)
+!results/findings.md
+
+# Temporary / scratch
+tmp/
+temp/
+*.tmp
+*.log

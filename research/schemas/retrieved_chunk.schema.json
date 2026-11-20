@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.research/schemas/retrieved_chunk.schema.json",
+  "title": "RetrievedChunk",
+  "description": "Single hit returned by the shared semantic retriever search(query, top_k, max_tokens). Used identically by Method A and Method B.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "chunk_id",
+    "snapshot_sha",
+    "path",
+    "symbol",
+    "start_line",
+    "end_line",
+    "text",
+    "token_count",
+    "content_hash",
+    "chunker_version",
+    "score"
+  ],
+  "properties": {
+    "chunk_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable chunk identifier within an index build."
+    },
+    "snapshot_sha": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pre-change snapshot commit SHA this chunk was indexed from."
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Repository-relative file path."
+    },
+    "symbol": {
+      "type": ["string", "null"],
+      "description": "Enclosing symbol when available; null otherwise."
+    },
+    "start_line": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "end_line": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "text": {
+      "type": "string",
+      "description": "Chunk text supplied as evidence (counts toward evidence budget)."
+    },
+    "token_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "content_hash": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Hash of content for integrity and deduplication."
+    },
+    "chunker_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "score": {
+      "type": "number",
+      "description": "Cosine similarity score from the shared NumPy index."
+    }
+  }
+}

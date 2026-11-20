@@ -1,0 +1,189 @@
+{
+  "schema_version": "1.1",
+  "status": "verified_partial",
+  "generated_at": "2026-11-19T02:39:46.879385+00:00",
+  "pi_repo_path": "C:\\Users\\froze\\Desktop\\pi-upstream",
+  "origin_url": "https://github.com/earendil-works/pi.git",
+  "notes": [
+    "Evaluator-side snapshot metadata only. Do not place target/parent SHAs in agent-visible task prompts.",
+    "Git history is authoritative for commit identity.",
+    "Candidate E (pi_network_retry / 37067e0) could not be resolved in the fetched upstream history as of Stage 2.",
+    "Pilot worktrees are detached checkouts of verified parent SHAs."
+  ],
+  "summary": {
+    "primary_total": 8,
+    "verified": 7,
+    "failed": 1,
+    "failed_task_ids": [
+      "pi_network_retry"
+    ]
+  },
+  "snapshots": [
+    {
+      "task_id": "pi_lazy_extension_loading",
+      "letter_id": "A",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "40c256cccbce062f6af5f2cacb85d0ce1ab4224d",
+      "parent_sha": "bfa6862400d0aaa3ebf3c09a44a2479487f470f1",
+      "target_tree_sha": "4995c6a9600c28e379e142a856755a991c4f6d54",
+      "parent_tree_sha": "98dcdb6be9679f1d7dadadf71f3072cdecdc32df",
+      "target_commit_date": "2026-09-19",
+      "target_subject": "feat(coding-agent): defer extension loader dependencies",
+      "expected_parent_prefix": "bfa6862",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "bfa6862400d0aaa3ebf3c09a44a2479487f470f1"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "pilot",
+      "worktree_path": "C:\\Users\\froze\\Desktop\\pi-task-lazy",
+      "error": null,
+      "target_input": "40c256c"
+    },
+    {
+      "task_id": "pi_package_filtering",
+      "letter_id": "B",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "ef1fc3103ee869244800f301993bd4952125db78",
+      "parent_sha": "dd838d0fe09db079dcf2f57bab1d79d4df5a0e4c",
+      "target_tree_sha": "88bf88412228645ec94c4d896134f89be0979219",
+      "parent_tree_sha": "a2dc723fd071c917d6e6878dc4722aef5f0abd8e",
+      "target_commit_date": "2026-01-23",
+      "target_subject": "feat(coding-agent): add packages array with filtering support",
+      "expected_parent_prefix": "dd838d0",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "dd838d0fe09db079dcf2f57bab1d79d4df5a0e4c"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "pilot",
+      "worktree_path": "C:\\Users\\froze\\Desktop\\pi-task-packages",
+      "error": null,
+      "target_input": "ef1fc31"
+    },
+    {
+      "task_id": "pi_package_progress_conflicts",
+      "letter_id": "C",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "4058680d225535d25705aaf02644957c0ed7a096",
+      "parent_sha": "b846a4bfcf168ae218dbeb0fecc24a98c0b3e332",
+      "target_tree_sha": "835653ce2f46c1cc1bc8ff2fe0a25574bc030eab",
+      "parent_tree_sha": "294c738e3cc2e57909b813641490b584bb4709fd",
+      "target_commit_date": "2026-01-22",
+      "target_subject": "feat(coding-agent): progress callbacks, conflict detection, URL parsing, tests (#645)",
+      "expected_parent_prefix": "b846a4b",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "b846a4bfcf168ae218dbeb0fecc24a98c0b3e332"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "candidate",
+      "worktree_path": null,
+      "error": null,
+      "target_input": "4058680"
+    },
+    {
+      "task_id": "pi_package_dedup_collisions",
+      "letter_id": "D",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "50c83235904bb24e8d634cc25f7f761ec1324e98",
+      "parent_sha": "c5c515f56096f212e0ad1e7f5c3c9b115908d37c",
+      "target_tree_sha": "b03424f6f381018560bae8948579adcab2c89bb7",
+      "parent_tree_sha": "d010d79f7fd9fa669acee552340604bdb297c671",
+      "target_commit_date": "2026-01-24",
+      "target_subject": "feat(coding-agent): package deduplication and collision detection",
+      "expected_parent_prefix": "c5c515f",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "c5c515f56096f212e0ad1e7f5c3c9b115908d37c"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "candidate",
+      "worktree_path": null,
+      "error": null,
+      "target_input": "50c8323"
+    },
+    {
+      "task_id": "pi_network_retry",
+      "letter_id": "E",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": null,
+      "parent_sha": null,
+      "target_tree_sha": null,
+      "parent_tree_sha": null,
+      "target_commit_date": null,
+      "target_subject": null,
+      "expected_parent_prefix": "4860665",
+      "parent_prefix_verified": false,
+      "parent_list": [],
+      "verification_status": "verification_failed",
+      "pilot_status": "candidate",
+      "worktree_path": null,
+      "error": "target commit not found: 37067e0",
+      "target_input": "37067e0"
+    },
+    {
+      "task_id": "pi_rpc_context_statistics",
+      "letter_id": "F",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "835296b1d7d999100ee1c465b4958031d0bb5adc",
+      "parent_sha": "9a0be024a6ff381362e04b19dd1c155c44675f4a",
+      "target_tree_sha": "dae239331a088274a9b4794df2bcb35f171ee113",
+      "parent_tree_sha": "5b32cb58314c9315ee2bb1abc1a7c27040d08e36",
+      "target_commit_date": "2026-03-24",
+      "target_subject": "fix(coding-agent): expose rpc context usage closes #2550",
+      "expected_parent_prefix": "9a0be02",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "9a0be024a6ff381362e04b19dd1c155c44675f4a"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "candidate",
+      "worktree_path": null,
+      "error": null,
+      "target_input": "835296b1d7d999100ee1c465b4958031d0bb5adc"
+    },
+    {
+      "task_id": "pi_session_directory_config",
+      "letter_id": "G",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "8191d59c170c9bb336a82771e1826d25bb7ec1e0",
+      "parent_sha": "8632e1b9484b9be62e8fc9b31757176f7c560313",
+      "target_tree_sha": "ee4628700474a28c1e02fe23ed9ebd76de6a266e",
+      "parent_tree_sha": "c2b084120e9d41d56ec079ce3dea53e1cc2c6111",
+      "target_commit_date": "2026-04-30",
+      "target_subject": "feat(coding-agent): support session dir env",
+      "expected_parent_prefix": "8632e1b",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "8632e1b9484b9be62e8fc9b31757176f7c560313"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "candidate",
+      "worktree_path": null,
+      "error": null,
+      "target_input": "8191d59c170c9bb336a82771e1826d25bb7ec1e0"
+    },
+    {
+      "task_id": "pi_cli_mode_validation",
+      "letter_id": "H",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "target_sha": "e40126f578ccc0a4a21f8d30cd8e96c8ecfe1722",
+      "parent_sha": "1a584a7a56eb5e7b4ff8ccbd46430f1533282eed",
+      "target_tree_sha": "330631a38d9bee993270627e97aa915d25beae10",
+      "parent_tree_sha": "d853dce65886349261fbfc310cea595b5b6b6bf2",
+      "target_commit_date": "2026-09-22",
+      "target_subject": "fix(coding-agent): reject invalid --mode values",
+      "expected_parent_prefix": "1a584a7",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "1a584a7a56eb5e7b4ff8ccbd46430f1533282eed"
+      ],
+      "verification_status": "verified",
+      "pilot_status": "candidate",
+      "worktree_path": null,
+      "error": null,
+      "target_input": "e40126f578ccc0a4a21f8d30cd8e96c8ecfe1722"
+    }
+  ]
+}

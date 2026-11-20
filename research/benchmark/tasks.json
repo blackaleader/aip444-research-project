@@ -1,0 +1,24 @@
+{
+  "schema_version": "2.0",
+  "notes": [
+    "Agent-visible task records contain ONLY task_id, task_prompt, context_budget, and agent_call_limit.",
+    "Do not place target/parent SHAs, commit messages, diffs, changed-file lists, or ground truth in this file's agent-facing fields.",
+    "Budgets mirror frozen pilot-v1.0 config/experiment.yaml (predetermined, not optimized).",
+
+    "Task validation status is recorded in candidates.json and docs/benchmark_validation.md."
+  ],
+  "tasks": [
+    {
+      "task_id": "pi_lazy_extension_loading",
+      "task_prompt": "Improve extension loading so compiler-related dependencies are loaded only when required for filesystem-backed extensions. Preserve compatibility across supported runtime environments, including standard Node, Bun, and standalone executable deployments.",
+      "context_budget": 6000,
+      "agent_call_limit": 5
+    },
+    {
+      "task_id": "pi_package_filtering",
+      "task_prompt": "Introduce a dedicated package configuration for external npm and Git sources while preserving existing configuration behavior. Support selective loading of package-provided resources and maintain consistent package-management behavior.",
+      "context_budget": 6000,
+      "agent_call_limit": 5
+    }
+  ]
+}
