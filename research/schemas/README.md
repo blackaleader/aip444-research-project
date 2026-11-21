@@ -14,3 +14,9 @@ Authoritative narrative: `docs/handoff_contract.md`.
 Ownership matrix: `docs/ownership_matrix.md`.
 
 All teammate-produced instance data remains **pending** until delivered.
+
+## T2 benchmark contracts
+
+`tasks.schema.json` defines the central four-field method task. The existing GT and
+snapshot schemas accept the T2 provenance fields and constrain complete source
+identifiers. Offline checks validate source existence, hashes and span consistency.

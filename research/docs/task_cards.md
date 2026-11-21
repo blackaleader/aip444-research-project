@@ -52,3 +52,7 @@ Sources of truth:
 | R1 `32bcdc9` | advanced_reserve | — | Not a primary candidate |
 
 Details: `docs/benchmark_validation.md`.
+
+## T2 candidate expansion
+
+The two cards above are the preserved independent pilot. The proposed eight-task version is [t2_task_cards.md](t2_task_cards.md), generated from the versioned T2 decision inputs. Human relevance review and main-task inclusion remain pending.

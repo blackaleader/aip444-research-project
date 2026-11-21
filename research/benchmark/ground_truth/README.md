@@ -71,3 +71,7 @@ Each task will eventually have a JSON (or YAML) annotation file, e.g. `ground_tr
 | Schema definition + loader / scoring (core P/R/F1, essential-file recall) | EXP |
 | Optional reviewed gold / leakage audit | Teammate 2 (enhancement) |
 | Optional MRR/nDCG/viz | Teammate 3 (enhancement) |
+
+## T2 versioned proposal
+
+The two top-level JSON files remain the independent frozen-pilot baseline. `t2_context_v1/*.json` contains eight proposed T2 annotations following the same schema, with additional parent-file/span hashes and explicit pending human-review status. Select it only in the offline evaluator with `load_ground_truth(task_id, annotation_set="t2_context_v1")`. Matching neutral prompts are in `benchmark/task_sets/t2_context_v1.json`; do not silently mix these revised requests and labels into pilot-v1.0. All gold and review files are evaluator-only. See `docs/t2_integration.md` from the research root.

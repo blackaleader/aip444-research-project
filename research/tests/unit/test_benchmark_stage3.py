@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -21,12 +22,6 @@ GT_DIR = ROOT / "benchmark" / "ground_truth"
 TASKS_PATH = ROOT / "benchmark" / "tasks.json"
 CANDIDATES_PATH = ROOT / "benchmark" / "candidates.json"
 SNAPSHOTS_PATH = ROOT / "benchmark" / "manifests" / "snapshots.json"
-
-WORKTREES = {
-    "pi_lazy_extension_loading": Path(r"C:\Users\froze\Desktop\pi-task-lazy"),
-    "pi_package_filtering": Path(r"C:\Users\froze\Desktop\pi-task-packages"),
-}
-
 
 @pytest.fixture(scope="module")
 def tasks_doc() -> dict:
@@ -119,10 +114,16 @@ def test_ground_truth_schema_and_status(task_id: str, snapshots_by_task: dict) -
     "task_id",
     ["pi_lazy_extension_loading", "pi_package_filtering"],
 )
-def test_parent_snapshot_file_existence_and_spans(task_id: str) -> None:
+def test_parent_snapshot_file_existence_and_spans(task_id: str, snapshots_by_task: dict) -> None:
+    # Optional real-source check. Self-contained Git integrity tests live in
+    # test_benchmark_integrity.py; the CLI validates all tasks without worktrees.
+    from repo_search.snapshot_paths import resolve_worktree_path, verify_worktree
+    if not os.environ.get("PI_WORKTREE_ROOT"):
+        pytest.skip("set PI_WORKTREE_ROOT for real detached-parent integration checks")
     gt = load_ground_truth(task_id)
-    root = WORKTREES[task_id]
-    assert root.is_dir(), f"missing worktree {root}"
+    snap = snapshots_by_task[task_id]
+    root = resolve_worktree_path(snap)
+    verify_worktree(root, snap["parent_sha"])
 
     for f in gt["files"]:
         path = root / f["path"]
@@ -153,10 +154,12 @@ def test_relevance_labels_and_required_subset(task_id: str) -> None:
     assert essentials, "need at least one essential file"
 
 
-def test_candidate_e_still_failed(candidates_doc: dict) -> None:
+def test_candidate_e_resolved_without_substitution(candidates_doc: dict, snapshots_by_task: dict) -> None:
     e = next(c for c in candidates_doc["primary_candidates"] if c["letter_id"] == "E")
-    assert e["validation_status"] == "verification_failed"
+    assert e["validation_status"] == "verified"
     assert e["target_commit"].startswith("37067e0")
+    assert e["verified_target_sha"] == snapshots_by_task[e["task_id"]]["target_sha"]
+    assert e["verified_parent_sha"].startswith("4860665")
 
 
 def test_pilot_task_validation_statuses(candidates_doc: dict) -> None:

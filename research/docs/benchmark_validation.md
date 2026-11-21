@@ -118,3 +118,7 @@ Enforced by `src/repo_search/benchmark_loader.py` and `tests/unit/test_benchmark
 
 Pilots A/B: prompts + GT complete under independent execution.  
 No corpus/RAG/agent implementation in this stage.
+
+## T2 integrated review
+
+The Stage 3 description above is historical. The independent pilot prompts and GT remain intact. T2 adds `t2_context_v1` with eight proposed task/annotation pairs, 34 task-file judgments and 49 source spans. All passed immutable-source/schema checks; human relevance sign-off remains pending. See [t2_benchmark_review.md](t2_benchmark_review.md) for explicit A/B differences and overlap, and [t2_integration.md](t2_integration.md) for reproduction and evaluator-only set selection. No new set is activated in the frozen pilot automatically.

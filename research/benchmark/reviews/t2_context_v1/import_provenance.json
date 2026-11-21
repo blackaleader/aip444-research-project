@@ -1,0 +1,18 @@
+{
+  "source_artifact": "AIP444_Nirajan_Benchmark_Handoff.zip",
+  "source_sha256": "2126a1f6f41bf6660d27edb9f9d5467ed9062988b8ee9351e4aef7216c2261fa",
+  "central_base_commit": "beacd864bfe8c0b30529afc13db9100488d0e91a",
+  "transfer": "selective schema adaptation; no unrelated Git history merged",
+  "source_id_to_central_id": {
+    "pi-001": "pi_lazy_extension_loading",
+    "pi-002": "pi_package_filtering",
+    "pi-003": "pi_package_progress_conflicts",
+    "pi-004": "pi_package_dedup_collisions",
+    "pi-005": "pi_network_retry",
+    "pi-006": "pi_rpc_context_statistics",
+    "pi-007": "pi_session_directory_config",
+    "pi-008": "pi_cli_mode_validation"
+  },
+  "original_artifact_preserved": true,
+  "relevance_review": "pending_student_and_peer_review"
+}

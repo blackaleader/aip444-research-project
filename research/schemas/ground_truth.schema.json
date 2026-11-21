@@ -19,51 +19,166 @@
     "annotation_notes"
   ],
   "properties": {
-    "task_id": { "type": "string" },
-    "snapshot_sha": { "type": "string", "minLength": 40 },
-    "annotation_version": { "type": "string" },
+    "task_id": {
+      "type": "string"
+    },
+    "snapshot_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "annotation_version": {
+      "type": "string"
+    },
     "review_status": {
       "type": "string",
-      "enum": ["preliminary_self_validated", "validated", "rejected"]
+      "enum": [
+        "preliminary_self_validated",
+        "validated",
+        "rejected"
+      ]
     },
     "required_files": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "files": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["path", "relevance", "relevance_score", "rationale", "symbols", "line_spans"],
+        "required": [
+          "path",
+          "relevance",
+          "relevance_score",
+          "rationale",
+          "symbols",
+          "line_spans"
+        ],
         "properties": {
-          "path": { "type": "string" },
-          "relevance": { "type": "string", "enum": ["essential", "supporting", "irrelevant"] },
-          "relevance_score": { "type": "integer", "enum": [0, 1, 2] },
-          "rationale": { "type": "string" },
-          "symbols": { "type": "array", "items": { "type": "string" } },
+          "path": {
+            "type": "string"
+          },
+          "relevance": {
+            "type": "string",
+            "enum": [
+              "essential",
+              "supporting",
+              "irrelevant"
+            ]
+          },
+          "relevance_score": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2
+            ]
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "line_spans": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["start_line", "end_line"],
+              "required": [
+                "start_line",
+                "end_line"
+              ],
               "properties": {
-                "start_line": { "type": "integer", "minimum": 1 },
-                "end_line": { "type": "integer", "minimum": 1 }
+                "start_line": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "end_line": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "content_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "symbol": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "anchor": {
+                  "type": "string",
+                  "minLength": 1
+                }
               }
-            }
+            },
+            "minItems": 1
+          },
+          "content_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "blob_sha": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
           }
         }
+      },
+      "minItems": 1
+    },
+    "relevant_symbols": {
+      "type": "array"
+    },
+    "relevant_spans": {
+      "type": "array"
+    },
+    "existing_tests": {
+      "type": "array",
+      "items": {
+        "type": "string"
       }
     },
-    "relevant_symbols": { "type": "array" },
-    "relevant_spans": { "type": "array" },
-    "existing_tests": { "type": "array", "items": { "type": "string" } },
-    "target_added_tests": { "type": "array", "items": { "type": "string" } },
+    "target_added_tests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "target_added_files_not_retrievable": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "excluded_changed_files": { "type": "array" },
-    "annotation_notes": { "type": "array", "items": { "type": "string" } }
+    "excluded_changed_files": {
+      "type": "array"
+    },
+    "annotation_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "annotation_set": {
+      "type": "string"
+    },
+    "implementation_origin": {
+      "enum": [
+        "independent",
+        "teammate_1",
+        "teammate_2",
+        "teammate_3"
+      ]
+    },
+    "human_review_status": {
+      "enum": [
+        "pending_student_and_peer_review",
+        "reviewed",
+        "rejected"
+      ]
+    }
   }
 }
