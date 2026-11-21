@@ -1,0 +1,9 @@
+task_id,reviewer,review_kind,status,decision_notes
+pi_lazy_extension_loading,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_package_filtering,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_package_progress_conflicts,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_package_dedup_collisions,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_network_retry,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_rpc_context_statistics,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_session_directory_config,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed
+pi_cli_mode_validation,,student_and_independent_peer_relevance_review,pending,No human sign-off claimed

@@ -48,3 +48,10 @@ Documented constraints and threats to validity. Update as the project progresses
 18. Do not generalise from two pilots to all repository-level SE tasks.  
 19. Do not cite fabricated paper statistics.  
 20. Distinguish scaffolding, planned work, unverified candidates, and completed experiments in every status update.
+
+## T2 benchmark status
+
+The original Candidate E is now resolved. T2 source/schema checks cover all eight
+candidate annotations. Human relevance sign-off and main-set acceptance are pending.
+The package cluster and the E/F shared essential file are recorded in the overlap
+assessment. The T2 set is versioned separately from the frozen A/B pilot.

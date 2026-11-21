@@ -113,3 +113,11 @@ Literature motivates *what* to measure; team roles decide *who* implements which
 ## Citation integrity note
 
 This document summarises methodological *principles* drawn from the named papers and public links above (Stage 1 foundation; Stage 1.5 ownership note added). It does **not** invent abstract findings, benchmark leaderboard numbers, or statistical results. When writing the group report, cite the original papers directly and verify claims against the PDFs.
+
+## T2 additional source: CodeRAG-Bench
+
+Wang et al. (2025), Sections 2.3–2.4, describe canonical-document annotations and separate retrieval evaluation from generation correctness. Their repository examples include RepoEval snippets and SWE-bench edited files. For our historical Pi tasks, an edited-file proxy can include future-created files and omit useful unchanged context. T2 therefore checks pre-change existence and source spans, records essential/supporting rationales, and keeps retrieval scoring separate from application-test execution. These are our adaptations, not a reproduction or evidence that Method B wins. Human label agreement remains a separate requirement.
+
+Wang, Z. Z., Asai, A., Yu, X. V., Xu, F. F., Xie, Y., Neubig, G., & Fried, D. (2025). CodeRAG-Bench: Can retrieval augment code generation? In *Findings of the Association for Computational Linguistics: NAACL 2025* (pp. 3199–3214). Association for Computational Linguistics. https://doi.org/10.18653/v1/2025.findings-naacl.176
+
+Primary record and PDF verified: https://aclanthology.org/2025.findings-naacl.176/

@@ -7,10 +7,11 @@
   "notes": [
     "Statuses are split: snapshot_verification_status, task_validation_status, benchmark_acceptance_status.",
     "Stage 3 completed preliminary pilots A/B only (preliminary_self_validated).",
-    "Candidate E remains verification_failed / unresolved.",
     "Candidates C/D flagged for package-management overlap; no full GT in Stage 3.",
-    "Target/parent SHAs and ground truth are evaluator-only — not in agent-visible tasks.json fields.",
-    "32bcdc9 remains advanced reserve only."
+    "Target/parent SHAs and ground truth are evaluator-only \u2014 not in agent-visible tasks.json fields.",
+    "32bcdc9 remains advanced reserve only.",
+    "T2 t2_context_v1 proposes all eight tasks; human relevance review and main inclusion are pending.",
+    "Candidate E is now verified at its original full commit; Stage 2 failure remains historical context."
   ],
   "primary_candidates": [
     {
@@ -30,7 +31,9 @@
       "verified_parent_sha": "bfa6862400d0aaa3ebf3c09a44a2479487f470f1",
       "snapshot_verification_status": "verified",
       "task_validation_status": "preliminary_self_validated",
-      "benchmark_acceptance_status": "pilot_accepted_preliminary"
+      "benchmark_acceptance_status": "pilot_accepted_preliminary",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     },
     {
       "letter_id": "B",
@@ -49,7 +52,9 @@
       "verified_parent_sha": "dd838d0fe09db079dcf2f57bab1d79d4df5a0e4c",
       "snapshot_verification_status": "verified",
       "task_validation_status": "preliminary_self_validated",
-      "benchmark_acceptance_status": "pilot_accepted_preliminary"
+      "benchmark_acceptance_status": "pilot_accepted_preliminary",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     },
     {
       "letter_id": "C",
@@ -61,9 +66,9 @@
       "validation_status": "verified",
       "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred. Package-management overlap watch with D.",
       "outstanding_checks": [
-        "Review overlap with candidate D",
-        "Draft neutral task prompt",
-        "Confirm test availability on pre-change snapshot"
+        "human_relevance_review",
+        "main_inclusion_decision",
+        "package_cluster_overlap_review"
       ],
       "overlap_flag": {
         "related_candidates": [
@@ -74,8 +79,10 @@
       "verified_target_sha": "4058680d225535d25705aaf02644957c0ed7a096",
       "verified_parent_sha": "b846a4bfcf168ae218dbeb0fecc24a98c0b3e332",
       "snapshot_verification_status": "verified",
-      "task_validation_status": "not_started",
-      "benchmark_acceptance_status": "candidate_reserved"
+      "task_validation_status": "t2_proposed_pending_human_review",
+      "benchmark_acceptance_status": "candidate_reserved",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     },
     {
       "letter_id": "D",
@@ -87,9 +94,9 @@
       "validation_status": "verified",
       "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred. Package-management overlap watch with C.",
       "outstanding_checks": [
-        "Review overlap with candidate C",
-        "Draft neutral task prompt",
-        "Confirm test availability on pre-change snapshot"
+        "human_relevance_review",
+        "main_inclusion_decision",
+        "package_cluster_overlap_review"
       ],
       "overlap_flag": {
         "related_candidates": [
@@ -100,26 +107,31 @@
       "verified_target_sha": "50c83235904bb24e8d634cc25f7f761ec1324e98",
       "verified_parent_sha": "c5c515f56096f212e0ad1e7f5c3c9b115908d37c",
       "snapshot_verification_status": "verified",
-      "task_validation_status": "not_started",
-      "benchmark_acceptance_status": "candidate_reserved"
+      "task_validation_status": "t2_proposed_pending_human_review",
+      "benchmark_acceptance_status": "candidate_reserved",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     },
     {
       "letter_id": "E",
       "task_id": "pi_network_retry",
-      "target_commit": "37067e0",
+      "target_commit": "37067e0166dbbcd9362797d84ab44c6f98e6cc40",
       "known_parent_prefix": "4860665",
       "focus": "Network retry handling",
       "status": "candidate",
-      "validation_status": "verification_failed",
-      "notes": "Stage 2: target commit 37067e0 not found. Remains verification_failed. No Stage 3 task/GT work.",
+      "validation_status": "verified",
+      "notes": "Original Candidate E resolved using local Git and GitHub. T2 proposal is versioned separately.",
       "outstanding_checks": [
-        "Obtain resolvable full target SHA from Teammate 2 / maintainers",
-        "Re-run scripts/verify_benchmark.py",
-        "Do not mark verified until object exists and parent prefix matches"
+        "human_relevance_review",
+        "main_inclusion_decision"
       ],
-      "snapshot_verification_status": "verification_failed",
-      "task_validation_status": "not_started",
-      "benchmark_acceptance_status": "blocked_unresolved_snapshot"
+      "snapshot_verification_status": "verified",
+      "task_validation_status": "t2_proposed_pending_human_review",
+      "benchmark_acceptance_status": "candidate_pending_human_review",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending",
+      "verified_target_sha": "37067e0166dbbcd9362797d84ab44c6f98e6cc40",
+      "verified_parent_sha": "486066574ce7a11dc55d1296e2adf322c940526e"
     },
     {
       "letter_id": "F",
@@ -131,14 +143,16 @@
       "validation_status": "verified",
       "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred; reserved for future expansion.",
       "outstanding_checks": [
-        "Draft neutral task prompt",
-        "Confirm test availability on pre-change snapshot"
+        "human_relevance_review",
+        "main_inclusion_decision"
       ],
       "verified_target_sha": "835296b1d7d999100ee1c465b4958031d0bb5adc",
       "verified_parent_sha": "9a0be024a6ff381362e04b19dd1c155c44675f4a",
       "snapshot_verification_status": "verified",
-      "task_validation_status": "not_started",
-      "benchmark_acceptance_status": "candidate_reserved"
+      "task_validation_status": "t2_proposed_pending_human_review",
+      "benchmark_acceptance_status": "candidate_reserved",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     },
     {
       "letter_id": "G",
@@ -150,14 +164,16 @@
       "validation_status": "verified",
       "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred; reserved for future expansion.",
       "outstanding_checks": [
-        "Draft neutral task prompt",
-        "Confirm test availability on pre-change snapshot"
+        "human_relevance_review",
+        "main_inclusion_decision"
       ],
       "verified_target_sha": "8191d59c170c9bb336a82771e1826d25bb7ec1e0",
       "verified_parent_sha": "8632e1b9484b9be62e8fc9b31757176f7c560313",
       "snapshot_verification_status": "verified",
-      "task_validation_status": "not_started",
-      "benchmark_acceptance_status": "candidate_reserved"
+      "task_validation_status": "t2_proposed_pending_human_review",
+      "benchmark_acceptance_status": "candidate_reserved",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     },
     {
       "letter_id": "H",
@@ -169,14 +185,16 @@
       "validation_status": "verified",
       "notes": "Stage 2 snapshot verified. Stage 3 full GT deferred; reserved for future expansion.",
       "outstanding_checks": [
-        "Draft neutral task prompt",
-        "Confirm test availability on pre-change snapshot"
+        "human_relevance_review",
+        "main_inclusion_decision"
       ],
       "verified_target_sha": "e40126f578ccc0a4a21f8d30cd8e96c8ecfe1722",
       "verified_parent_sha": "1a584a7a56eb5e7b4ff8ccbd46430f1533282eed",
       "snapshot_verification_status": "verified",
-      "task_validation_status": "not_started",
-      "benchmark_acceptance_status": "candidate_reserved"
+      "task_validation_status": "t2_proposed_pending_human_review",
+      "benchmark_acceptance_status": "candidate_reserved",
+      "teammate_2_annotation_set": "t2_context_v1",
+      "teammate_2_review_status": "structural_checks_complete_human_relevance_review_pending"
     }
   ],
   "advanced_reserve": [
@@ -185,7 +203,7 @@
       "task_id": "pi_advanced_reserve_32bcdc9",
       "target_commit": "32bcdc9",
       "known_parent_prefix": null,
-      "focus": "Advanced reserve — reported CI issue requires investigation before acceptance",
+      "focus": "Advanced reserve \u2014 reported CI issue requires investigation before acceptance",
       "status": "advanced_reserve",
       "validation_status": "unverified",
       "notes": "NOT one of the eight primary candidates. Separate advanced reserve. Do not include in the primary pilot or candidate set until the reported CI issue is investigated and the task is explicitly accepted.",

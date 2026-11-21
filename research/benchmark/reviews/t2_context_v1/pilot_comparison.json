@@ -1,0 +1,32 @@
+[
+  {
+    "task_id": "pi_lazy_extension_loading",
+    "baseline_preserved": true,
+    "proposed_prompt_differs": true,
+    "added_judgments": [
+      "packages/coding-agent/src/core/sdk.ts"
+    ],
+    "omitted_judgments": [],
+    "label_changes": [],
+    "decision": "pending blinded human review; no automatic overwrite"
+  },
+  {
+    "task_id": "pi_package_filtering",
+    "baseline_preserved": true,
+    "proposed_prompt_differs": true,
+    "added_judgments": [
+      "packages/coding-agent/src/core/resource-loader.ts"
+    ],
+    "omitted_judgments": [
+      "packages/coding-agent/src/index.ts"
+    ],
+    "label_changes": [
+      {
+        "path": "packages/coding-agent/src/main.ts",
+        "baseline": "supporting",
+        "proposal": "essential"
+      }
+    ],
+    "decision": "pending blinded human review; no automatic overwrite"
+  }
+]

@@ -22,3 +22,15 @@
 - Note when AI drafts were rejected or heavily rewritten.  
 - Never paste API keys or secrets into prompts or this log.  
 - Link to files touched when helpful (`research/...`).
+
+## T2 local integration — 20 November 2026
+
+| Tool | Actual assistance | Verification | Human review |
+| --- | --- | --- | --- |
+| ChatGPT / Codex, GitHub connector and local Git | Read the central README, handoff, benchmark files and interfaces; selectively adapt the existing Ni handoff | Original candidate identities checked against GitHub and Git objects | Student review pending |
+| ChatGPT / Codex | Implement T2 benchmark validation, input isolation, deterministic generation, worktree reproduction, tests and documentation | Command exits and saved results recorded in the T2 validation record | Student and independent peer relevance sign-off pending |
+| ChatGPT / Codex with primary-source reading | Verify CodeRAG-Bench bibliographic data and annotation/evaluation connection | ACL Anthology record and relevant PDF sections checked | Student critical reading remains personal work |
+
+No model identifier beyond ChatGPT/Codex was recorded. No retrieval implementation,
+agent controller, behavior-analysis utility, experimental result, personal reflection
+or human review was fabricated. No GitHub push is performed in this delivery.

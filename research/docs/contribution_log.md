@@ -45,3 +45,16 @@
 
 - Stage 1 establishes EXP scaffolding only.  
 - Mark fallbacks clearly if EXP substitutes for T1/T2 later.
+
+## T2 local integration — 20 November 2026
+
+| Member | Workstream | Delivered work | Status |
+| --- | --- | --- | --- |
+| Nirajan Bhandari, AI-assisted preparation | Repository Context Engineering and Benchmark Validation | Eight original snapshot identities cross-checked against GitHub/local Git; original Candidate E resolved; versioned task/annotation set adapted to central IDs and schemas | Source/schema checks complete |
+| Nirajan Bhandari, AI-assisted preparation | T2 implementation | Benchmark loader isolation, offline provenance validation, deterministic builder, detached-worktree reproduction and T2 regression tests | Local implementation |
+| Nirajan Bhandari, AI-assisted preparation | T2 documentation | Benchmark and overlap record, additional scholarly connection, reproduction instructions and validation record | Local delivery |
+
+The retrieval stack, agent controller/tools, orchestration, token accounting and
+analysis code are unchanged. No experimental runs or completed human relevance
+review are claimed. Time spent is not recorded. This entry records local work;
+GitHub publication is performed manually by the student.

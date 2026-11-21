@@ -7,6 +7,7 @@ Does not modify repository state (no checkout, reset, rebase, or worktree deleti
 from __future__ import annotations
 
 import subprocess
+import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -102,6 +103,8 @@ def verify_candidate(
     worktree_path: str | None = None,
 ) -> CommitVerification:
     """Resolve target/parent SHAs and validate the expected parent prefix."""
+    if not re.fullmatch(r"[0-9a-f]{7,40}", target_commit) or not re.fullmatch(r"[0-9a-f]{4,40}", expected_parent_prefix):
+        raise ValueError("candidate target and parent prefix must be hexadecimal commit identifiers")
     if not object_exists(repo, target_commit):
         return CommitVerification(
             letter_id=letter_id,
@@ -153,6 +156,8 @@ def verify_candidate(
             target_sha,
         ).splitlines()
         parent_list = meta[1].split() if len(meta) > 1 and meta[1] else []
+        if parent_list != [parent_sha]:
+            raise GitCommandError("benchmark target must have exactly one recorded parent")
         target_tree = meta[2] if len(meta) > 2 else resolve_tree(repo, target_sha)
         date = meta[3] if len(meta) > 3 else None
         subject = meta[4] if len(meta) > 4 else None

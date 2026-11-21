@@ -94,6 +94,12 @@ def verify_origin(repo: Path) -> tuple[bool, str]:
 
 
 def default_worktree_map() -> dict[str, str]:
+    portable = os.environ.get("PI_WORKTREE_ROOT")
+    if portable:
+        if not Path(portable).expanduser().is_dir():
+            raise ValueError("PI_WORKTREE_ROOT does not exist; run scripts/prepare_worktrees.py")
+        return {p.name: str(p.resolve()) for p in Path(portable).expanduser().iterdir()
+                if p.is_dir() and (p / ".git").exists()}
     desktop = Path.home() / "Desktop"
     # Also support the path layout used in this workspace.
     lazy = Path(r"C:\Users\froze\Desktop\pi-task-lazy")
@@ -154,7 +160,11 @@ def main(argv: list[str] | None = None) -> int:
 
     candidates_doc = json.loads(args.candidates.read_text(encoding="utf-8"))
     primary = candidates_doc.get("primary_candidates", [])
-    worktrees = default_worktree_map()
+    try:
+        worktrees = default_worktree_map()
+    except (OSError, ValueError) as exc:
+        print(f"CONFIG ERROR: {exc}", file=sys.stderr)
+        return 2
 
     results = []
     verified = []
@@ -173,6 +183,13 @@ def main(argv: list[str] | None = None) -> int:
             worktree_path=worktrees.get(task_id),
         )
         results.append(result)
+        if result.worktree_path and result.verification_status == "verified":
+            from repo_search.snapshot_paths import verify_worktree
+            try:
+                verify_worktree(Path(result.worktree_path), result.parent_sha, source_repo=repo)
+            except (ValueError, RuntimeError) as exc:
+                print(f"CONFIG ERROR: invalid prepared worktree for {task_id}: {exc}", file=sys.stderr)
+                return 2
         status = result.verification_status
         mark = "OK" if status == "verified" else "FAIL"
         print(
@@ -197,7 +214,7 @@ def main(argv: list[str] | None = None) -> int:
         "notes": [
             "Evaluator-side snapshot metadata only. Do not place target/parent SHAs in agent-visible task prompts.",
             "Git history is authoritative for commit identity.",
-            "Candidate E (pi_network_retry / 37067e0) could not be resolved in the fetched upstream history as of Stage 2.",
+            "Verification reflects this Git object database; failed candidates are not substituted.",
             "Pilot worktrees are detached checkouts of verified parent SHAs.",
         ],
         "summary": {

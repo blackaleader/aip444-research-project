@@ -135,3 +135,7 @@ Treat worktrees as read-only benchmark inputs.
 
 Updated: `benchmark/manifests/snapshots.json`  
 Status field: `verified_partial` (7 verified, 1 failed).
+
+## T2 verification update
+
+All eight original targets now resolve and match their expected parents. Candidate E is `37067e0166dbbcd9362797d84ab44c6f98e6cc40`, parent `486066574ce7a11dc55d1296e2adf322c940526e`; no substitute was used. GitHub Git-commit metadata and local Git agree. Both pilot worktrees were recreated detached, clean and linked to the correct common Git directory. The earlier failure and Windows paths above are historical. Use [t2_snapshot_review.md](t2_snapshot_review.md) and [t2_integration.md](t2_integration.md) for current portable instructions.

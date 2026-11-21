@@ -1,0 +1,813 @@
+{
+  "schema_version": "1.0",
+  "annotation_set": "t2_context_v1",
+  "decision_status": "AI-assisted draft; student and independent peer review pending",
+  "tasks": [
+    {
+      "task_id": "pi_lazy_extension_loading",
+      "source_task_id": "pi-001",
+      "task_prompt": "Importing the coding-agent SDK should not initialize the extension compiler or bundled extension-only modules before a filesystem extension is actually loaded. Preserve filesystem-extension loading in ordinary Node, source TypeScript, Bun-compiled binaries, Node SEA binaries, and the bundled Node distribution. Existing extension module resolution and caching behaviour must continue to work. Find the pre-existing repository context needed to make this change; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "One essential file is intentional. New helper modules in the target are future implementation artifacts, not retrievable parent evidence.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/core/extensions/loader.ts",
+          "relevance": "essential",
+          "rationale": "Owns the eager imports, embedded module map, runtime branch selection and extension import boundary.",
+          "spans": [
+            {
+              "symbol": "module imports and VIRTUAL_MODULES",
+              "start_line": 6,
+              "end_line": 81,
+              "anchor": "const VIRTUAL_MODULES"
+            },
+            {
+              "symbol": "loadExtensionModule",
+              "start_line": 503,
+              "end_line": 532,
+              "anchor": "async function loadExtensionModule"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/config.ts",
+          "relevance": "supporting",
+          "rationale": "Defines existing runtime identity flags that the loader consumes; this file is unchanged by the target.",
+          "spans": [
+            {
+              "symbol": "isBunBinary and isBundledNode",
+              "start_line": 16,
+              "end_line": 28,
+              "anchor": "export const isBunBinary"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/sdk.ts",
+          "relevance": "supporting",
+          "rationale": "Shows how SDK session initialization creates and reloads the resource loader; explains the public startup path without dictating a refactor.",
+          "spans": [
+            {
+              "symbol": "createAgentSession",
+              "start_line": 175,
+              "end_line": 191,
+              "anchor": "export async function createAgentSession"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/test/suite/regressions/8237-node-sea-extension-loading.test.ts",
+          "relevance": "supporting",
+          "rationale": "Pre-existing regression records the Node SEA virtual-module contract that must be preserved.",
+          "spans": [
+            {
+              "symbol": "Node SEA extension loading regression",
+              "start_line": 34,
+              "end_line": 49,
+              "anchor": "describe(\"Node SEA extension loading\""
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/suite/regressions/8237-node-sea-extension-loading.test.ts",
+          "content_sha256": "3055484d3d4e930f2b713d7f0eecde82fc1a706f71b0d4e2ec46c847acb0eec2",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/suite/regressions/8237-node-sea-extension-loading.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    },
+    {
+      "task_id": "pi_package_filtering",
+      "source_task_id": "pi-002",
+      "task_prompt": "Users need a dedicated packages setting for npm and Git package sources, separate from local extension, skill, prompt and theme paths. Accept a plain package source or an object that selects resources by type. An omitted resource selection keeps that type's normal package discovery; an empty selection loads none of that type. Preserve existing package sources by migrating them from the old extension configuration, retain local extension paths, and ensure package install, remove and list commands use the new configuration in the appropriate scope. Find the pre-existing repository context needed to make this change; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "No assumption is made that migration tests already exist. The target extends an existing test file; only parent bytes are admissible evidence.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/core/settings-manager.ts",
+          "relevance": "essential",
+          "rationale": "Owns the Settings shape, legacy migration, global/project reads and persistent extension configuration.",
+          "spans": [
+            {
+              "symbol": "Settings",
+              "start_line": 41,
+              "end_line": 70,
+              "anchor": "export interface Settings"
+            },
+            {
+              "symbol": "SettingsManager.migrateSettings and loadProjectSettings",
+              "start_line": 137,
+              "end_line": 195,
+              "anchor": "private static migrateSettings"
+            },
+            {
+              "symbol": "SettingsManager extension configuration accessors",
+              "start_line": 419,
+              "end_line": 433,
+              "anchor": "getExtensionPaths()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/package-manager.ts",
+          "relevance": "essential",
+          "rationale": "Resolves configured sources and collects each package's resources; filtering must flow through these existing boundaries.",
+          "spans": [
+            {
+              "symbol": "DefaultPackageManager.resolve",
+              "start_line": 106,
+              "end_line": 151,
+              "anchor": "async resolve("
+            },
+            {
+              "symbol": "DefaultPackageManager.resolveExtensionSourcesInternal",
+              "start_line": 247,
+              "end_line": 290,
+              "anchor": "private async resolveExtensionSourcesInternal"
+            },
+            {
+              "symbol": "DefaultPackageManager.collectPackageResources",
+              "start_line": 520,
+              "end_line": 569,
+              "anchor": "private collectPackageResources"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/main.ts",
+          "relevance": "essential",
+          "rationale": "Package commands persist, remove and list sources using the old settings representation; this consumer must align with the new configuration.",
+          "spans": [
+            {
+              "symbol": "updateExtensionSources and sourcesMatch",
+              "start_line": 101,
+              "end_line": 129,
+              "anchor": "function updateExtensionSources"
+            },
+            {
+              "symbol": "handlePackageCommand",
+              "start_line": 131,
+              "end_line": 209,
+              "anchor": "async function handlePackageCommand"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/resource-loader.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged downstream consumer demonstrates how resolved package paths enter extension and skill loading.",
+          "spans": [
+            {
+              "symbol": "DefaultResourceLoader.reload",
+              "start_line": 264,
+              "end_line": 298,
+              "anchor": "async reload()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/test/settings-manager.test.ts",
+          "relevance": "supporting",
+          "rationale": "Existing persistence tests show how user configuration is preserved. These are not the future migration tests added by the target.",
+          "spans": [
+            {
+              "symbol": "SettingsManager external configuration preservation",
+              "start_line": 57,
+              "end_line": 82,
+              "anchor": "should preserve custom settings"
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/settings-manager.test.ts",
+          "content_sha256": "33ff37ac81ccc6601534bfce4d4f4eae1fb1fb06b0e752df857e7a6772cd12ac",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/settings-manager.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/package-manager.test.ts",
+          "content_sha256": "80bf1ae17c61f112f6e092b5dec4a7d35cc1602c9180d58d80a787e380dfd5c5",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/package-manager.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/resource-loader.test.ts",
+          "content_sha256": "0ec94a3426c96af77d50764d9db643c273f9a678bcfc4b08d6c411084376200b",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/resource-loader.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    },
+    {
+      "task_id": "pi_package_progress_conflicts",
+      "source_task_id": "pi-003",
+      "task_prompt": "Package install, remove and update operations need observable start, completion and error feedback, with useful feedback in the CLI. Package sources should also accept common Git-host URLs without requiring a special prefix. When different loaded extensions register the same tool, command or flag name, report the conflict with the responsible extension paths. Preserve existing source handling. Find the pre-existing repository context needed to make these changes; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "Recommend reserve: mixed requirements and strong package-management overlap with pilot pi-002. Direct package-manager/resource-loader test files are introduced by this target.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/core/package-manager.ts",
+          "relevance": "essential",
+          "rationale": "Contains package operation boundaries and the source parser that need the requested behaviours.",
+          "spans": [
+            {
+              "symbol": "DefaultPackageManager.install remove update",
+              "start_line": 134,
+              "end_line": 191,
+              "anchor": "async install("
+            },
+            {
+              "symbol": "DefaultPackageManager.parseSource",
+              "start_line": 272,
+              "end_line": 302,
+              "anchor": "private parseSource"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/resource-loader.ts",
+          "relevance": "essential",
+          "rationale": "Collects loaded extension registrations and errors, providing the existing conflict inspection boundary.",
+          "spans": [
+            {
+              "symbol": "DefaultResourceLoader.reload",
+              "start_line": 264,
+              "end_line": 283,
+              "anchor": "async reload()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/main.ts",
+          "relevance": "essential",
+          "rationale": "Owns CLI package-command presentation and error feedback.",
+          "spans": [
+            {
+              "symbol": "handlePackageCommand",
+              "start_line": 126,
+              "end_line": 165,
+              "anchor": "async function handlePackageCommand"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/extensions/types.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged Extension interface documents tool, command and flag registration maps.",
+          "spans": [
+            {
+              "symbol": "Extension",
+              "start_line": 987,
+              "end_line": 997,
+              "anchor": "export interface Extension"
+            }
+          ]
+        }
+      ],
+      "existing_tests": []
+    },
+    {
+      "task_id": "pi_package_dedup_collisions",
+      "source_task_id": "pi-004",
+      "task_prompt": "The same package may be configured globally and in a project. Resolve each package identity once, with the project configuration taking precedence, while preserving resource filtering. Report collisions among named skills, prompts and themes with the retained and discarded resource paths. Startup and reload resource listings should make package origin and scope understandable. Preserve local resource discovery, including configured extension directories. Find the pre-existing repository context needed for this behaviour; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "Recommend reserve: 18 changed files, broad presentation/refactoring work, and overlap with pilot pi-002 and reserve pi-003. Task prompt scopes the user-visible deduplication/collision behaviour; incidental example/type-adapter edits are not automatically gold.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/core/package-manager.ts",
+          "relevance": "essential",
+          "rationale": "The parent aggregates global/project packages without identity-level deduplication and resolves resources without origin metadata.",
+          "spans": [
+            {
+              "symbol": "DefaultPackageManager.resolve",
+              "start_line": 272,
+              "end_line": 317,
+              "anchor": "async resolve("
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/resource-loader.ts",
+          "relevance": "essential",
+          "rationale": "Owns aggregation of extension, skill, prompt and theme results and diagnostics, before the target introduces structured collision data.",
+          "spans": [
+            {
+              "symbol": "DefaultResourceLoader.reload",
+              "start_line": 264,
+              "end_line": 351,
+              "anchor": "async reload()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/modes/interactive/interactive-mode.ts",
+          "relevance": "essential",
+          "rationale": "Shows resource lists and warnings to the user during startup and reload; needed for the requested origin/scope presentation.",
+          "spans": [
+            {
+              "symbol": "InteractiveMode.showLoadedResources",
+              "start_line": 651,
+              "end_line": 693,
+              "anchor": "private showLoadedResources"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/skills.ts",
+          "relevance": "supporting",
+          "rationale": "Pre-existing named-skill collision and real-path deduplication logic establishes first-winner behaviour to preserve.",
+          "spans": [
+            {
+              "symbol": "loadSkills.addSkills",
+              "start_line": 316,
+              "end_line": 347,
+              "anchor": "const skillMap"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/prompt-templates.ts",
+          "relevance": "supporting",
+          "rationale": "The prompt template shape lacks an explicit source file path, which is relevant to reporting collision provenance.",
+          "spans": [
+            {
+              "symbol": "PromptTemplate",
+              "start_line": 7,
+              "end_line": 15,
+              "anchor": "export interface PromptTemplate"
+            },
+            {
+              "symbol": "loadTemplateFromFile",
+              "start_line": 101,
+              "end_line": 132,
+              "anchor": "function loadTemplateFromFile"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/settings-manager.ts",
+          "relevance": "supporting",
+          "rationale": "Global/project settings and in-memory persistence affect duplicate-source precedence tests.",
+          "spans": [
+            {
+              "symbol": "SettingsManager.loadProjectSettings",
+              "start_line": 229,
+              "end_line": 242,
+              "anchor": "private loadProjectSettings"
+            },
+            {
+              "symbol": "SettingsManager.saveProjectSettings",
+              "start_line": 283,
+              "end_line": 296,
+              "anchor": "private saveProjectSettings"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/extensions/loader.ts",
+          "relevance": "supporting",
+          "rationale": "Configured extension-directory discovery is part of the compatibility requirement.",
+          "spans": [
+            {
+              "symbol": "discoverAndLoadExtensions configured paths",
+              "start_line": 483,
+              "end_line": 501,
+              "anchor": "configuredPaths"
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/package-manager.test.ts",
+          "content_sha256": "4423f684907b8ab805e849771fa7e0720f333aa890e23d51e5d5d5e7dded6290",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/package-manager.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/resource-loader.test.ts",
+          "content_sha256": "0ec94a3426c96af77d50764d9db643c273f9a678bcfc4b08d6c411084376200b",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/resource-loader.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/sdk-skills.test.ts",
+          "content_sha256": "f16c034b400a02227ea0042a0f0238d24ac4c678556da2ea2b600617067ecf82",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/sdk-skills.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    },
+    {
+      "task_id": "pi_network_retry",
+      "source_task_id": "pi-005",
+      "task_prompt": "A provider response can fail with the message 'Network connection lost.' and the current session stops instead of recovering. Treat this transient failure consistently with existing automatic retries. Preserve retry-disable and retry-limit settings, recovery events, and the separate handling of context overflow. Find the pre-existing repository context needed to fix this behaviour; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "A narrow change with one essential file; useful as a contrast to multi-file tasks. The target-specific regression file does not exist in the parent.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/core/agent-session.ts",
+          "relevance": "essential",
+          "rationale": "Defines retryable-error classification, the context-overflow guard and the existing retry workflow.",
+          "spans": [
+            {
+              "symbol": "AgentSession._isRetryableError",
+              "start_line": 2395,
+              "end_line": 2411,
+              "anchor": "private _isRetryableError"
+            },
+            {
+              "symbol": "AgentSession._handleRetryableError",
+              "start_line": 2413,
+              "end_line": 2458,
+              "anchor": "private async _handleRetryableError"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/settings-manager.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged retry settings define enabled state and retry/backoff limits.",
+          "spans": [
+            {
+              "symbol": "SettingsManager.getRetrySettings",
+              "start_line": 671,
+              "end_line": 678,
+              "anchor": "getRetrySettings()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/test/agent-session-retry.test.ts",
+          "relevance": "supporting",
+          "rationale": "Existing mocked provider network-error test demonstrates the adjacent recovery contract without real API calls.",
+          "spans": [
+            {
+              "symbol": "AgentSession provider network_error regression",
+              "start_line": 173,
+              "end_line": 194,
+              "anchor": "retries provider network_error failures"
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/agent-session-retry.test.ts",
+          "content_sha256": "8ddb37d6638ca9b0e29688fdb635d6d1c58c6054b515a3a1e6232eb5a77d5649",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/agent-session-retry.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/suite/agent-session-retry-events.test.ts",
+          "content_sha256": "ec67ee833da33b452b6f1c8f982dff2d39ad9658445a65326315b5eec38c6bce",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/suite/agent-session-retry-events.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    },
+    {
+      "task_id": "pi_rpc_context_statistics",
+      "source_task_id": "pi-006",
+      "task_prompt": "An RPC client requesting session statistics needs current context usage alongside cumulative token and cost totals. Include the available context token count, model context window and percentage. Immediately after compaction, do not present stale pre-compaction usage as the current value; preserve the existing representation for unknown usage until a fresh response is available. Find the pre-existing repository context needed to expose this information consistently; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "RPC transport and types are supporting even though the target does not edit them. The new agent-session-stats test file is not parent evidence. Shares a large source file with pi-005 but uses different symbols.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/core/agent-session.ts",
+          "relevance": "essential",
+          "rationale": "Owns both the SessionStats return contract and an existing compaction-aware current-context calculation.",
+          "spans": [
+            {
+              "symbol": "SessionStats",
+              "start_line": 186,
+              "end_line": 203,
+              "anchor": "export interface SessionStats"
+            },
+            {
+              "symbol": "AgentSession.getSessionStats",
+              "start_line": 2988,
+              "end_line": 3033,
+              "anchor": "getSessionStats()"
+            },
+            {
+              "symbol": "AgentSession.getContextUsage",
+              "start_line": 3035,
+              "end_line": 3079,
+              "anchor": "getContextUsage()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/modes/rpc/rpc-mode.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged RPC handler forwards session statistics directly, demonstrating how a shared stats change reaches the RPC response.",
+          "spans": [
+            {
+              "symbol": "runRpcMode get_session_stats command",
+              "start_line": 490,
+              "end_line": 496,
+              "anchor": "case \"get_session_stats\""
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/modes/rpc/rpc-types.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged RPC response union refers to SessionStats rather than duplicating its fields.",
+          "spans": [
+            {
+              "symbol": "RpcResponse session statistics variant",
+              "start_line": 168,
+              "end_line": 173,
+              "anchor": "command: \"get_session_stats\""
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/rpc-jsonl.test.ts",
+          "content_sha256": "8271b27fbb0f5a2678b89c67cb4935fe7d7589f92fe926b2d0464b7c7fdcf369",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/rpc-jsonl.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/session-manager/build-context.test.ts",
+          "content_sha256": "0b41012e34c989ae50213f15ee1b2088189abff2610d1d7ba23beb9a830d6597",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/session-manager/build-context.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    },
+    {
+      "task_id": "pi_session_directory_config",
+      "source_task_id": "pi-007",
+      "task_prompt": "Allow a session storage directory to be configured through an application-named environment variable independently of the agent configuration directory. An explicit --session-dir option must take precedence, followed by the environment setting and then the existing settings/default behaviour. Support home-directory shorthand and make the CLI help distinguish agent configuration storage from session storage. Preserve existing session selection behaviour. Find the pre-existing repository context needed to implement this feature; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "No test file is changed by the target. Existing suites are related coverage, not proof of direct coverage for the new environment feature.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/config.ts",
+          "relevance": "essential",
+          "rationale": "Defines application-specific environment naming and the existing home-directory expansion convention.",
+          "spans": [
+            {
+              "symbol": "ENV_AGENT_DIR",
+              "start_line": 321,
+              "end_line": 329,
+              "anchor": "export const ENV_AGENT_DIR"
+            },
+            {
+              "symbol": "getAgentDir",
+              "start_line": 343,
+              "end_line": 353,
+              "anchor": "export function getAgentDir"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/main.ts",
+          "relevance": "essential",
+          "rationale": "Selects the session directory before session selection; the new precedence must enter here.",
+          "spans": [
+            {
+              "symbol": "main session directory selection",
+              "start_line": 486,
+              "end_line": 497,
+              "anchor": "const sessionDir = parsed.sessionDir"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/cli/args.ts",
+          "relevance": "essential",
+          "rationale": "Owns the explicit session-directory argument and user-visible environment-variable help contract.",
+          "spans": [
+            {
+              "symbol": "parseArgs session-dir option",
+              "start_line": 96,
+              "end_line": 102,
+              "anchor": "arg === \"--session-dir\""
+            },
+            {
+              "symbol": "printHelp environment variables",
+              "start_line": 322,
+              "end_line": 329,
+              "anchor": "ENV_AGENT_DIR.padEnd"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/settings-manager.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged existing configured session directory and tilde expansion supply the fallback behaviour.",
+          "spans": [
+            {
+              "symbol": "SettingsManager.getSessionDir",
+              "start_line": 576,
+              "end_line": 588,
+              "anchor": "getSessionDir()"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/core/session-manager.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged default session-directory logic explains how an absent override falls back to per-working-directory storage.",
+          "spans": [
+            {
+              "symbol": "getDefaultSessionDir",
+              "start_line": 428,
+              "end_line": 435,
+              "anchor": "export function getDefaultSessionDir"
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/args.test.ts",
+          "content_sha256": "c0246e5b2a638fa30964837838f70b3d79741f3a3463071133ab3c3b3cc57410",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/args.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/settings-manager.test.ts",
+          "content_sha256": "e10790619070756dae48f97326e3b0d618032f08d7eab1c89f2ea61cf95a4c05",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/settings-manager.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        },
+        {
+          "path": "packages/coding-agent/test/session-manager/file-operations.test.ts",
+          "content_sha256": "417e1a574a6b6bcf38e73fc4d01bba3b53d218d5498a03ae06282ae167a7460d",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/session-manager/file-operations.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    },
+    {
+      "task_id": "pi_cli_mode_validation",
+      "source_task_id": "pi-008",
+      "task_prompt": "The --mode option should accept only text, json and rpc. Report invalid or missing values as argument errors instead of silently ignoring them or treating them as normal messages. When another option follows --mode, preserve that option for normal parsing. Valid values and repeated options must continue to work, while any invalid occurrence still produces a diagnostic. Find the pre-existing repository context needed to fix this behaviour; return ranked code evidence and do not implement a patch.",
+      "annotation_notes": "One essential file is deliberate. New validation cases are added inside an existing test file; only the original tests are available in the parent.",
+      "files": [
+        {
+          "path": "packages/coding-agent/src/cli/args.ts",
+          "relevance": "essential",
+          "rationale": "Defines valid modes, the diagnostics result and the existing mode-argument parsing branch.",
+          "spans": [
+            {
+              "symbol": "Mode and Args",
+              "start_line": 11,
+              "end_line": 39,
+              "anchor": "export type Mode"
+            },
+            {
+              "symbol": "parseArgs mode branch",
+              "start_line": 71,
+              "end_line": 103,
+              "anchor": "export function parseArgs"
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/test/args.test.ts",
+          "relevance": "supporting",
+          "rationale": "Pre-existing tests verify successful json/rpc parsing, providing a compatibility baseline.",
+          "spans": [
+            {
+              "symbol": "parseArgs existing mode tests",
+              "start_line": 118,
+              "end_line": 126,
+              "anchor": "test(\"parses --mode\""
+            }
+          ]
+        },
+        {
+          "path": "packages/coding-agent/src/main.ts",
+          "relevance": "supporting",
+          "rationale": "Unchanged CLI startup already prints parser diagnostics and exits on error, so the parser can use the existing propagation mechanism.",
+          "spans": [
+            {
+              "symbol": "main parser diagnostics handling",
+              "start_line": 607,
+              "end_line": 615,
+              "anchor": "const parsed = parseArgs(args)"
+            }
+          ]
+        }
+      ],
+      "existing_tests": [
+        {
+          "path": "packages/coding-agent/test/args.test.ts",
+          "content_sha256": "55660408eaa82498adfcf5b91df15658796919797dba9472922e5805ede575b0",
+          "cwd": "packages/coding-agent",
+          "command": [
+            "node",
+            "../../node_modules/vitest/dist/cli.js",
+            "--run",
+            "test/args.test.ts"
+          ],
+          "execution_status": "not_executed",
+          "coverage": "related existing test; new task behaviour is not assumed covered"
+        }
+      ]
+    }
+  ]
+}

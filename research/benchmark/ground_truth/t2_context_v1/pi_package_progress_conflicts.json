@@ -1,0 +1,186 @@
+{
+  "task_id": "pi_package_progress_conflicts",
+  "snapshot_sha": "b846a4bfcf168ae218dbeb0fecc24a98c0b3e332",
+  "annotation_version": "t2-1.0",
+  "annotation_set": "t2_context_v1",
+  "implementation_origin": "teammate_2",
+  "review_status": "preliminary_self_validated",
+  "human_review_status": "pending_student_and_peer_review",
+  "required_files": [
+    "packages/coding-agent/src/core/package-manager.ts",
+    "packages/coding-agent/src/core/resource-loader.ts",
+    "packages/coding-agent/src/main.ts"
+  ],
+  "files": [
+    {
+      "path": "packages/coding-agent/src/core/package-manager.ts",
+      "relevance": "essential",
+      "relevance_score": 2,
+      "rationale": "Contains package operation boundaries and the source parser that need the requested behaviours.",
+      "symbols": [
+        "DefaultPackageManager.install remove update",
+        "DefaultPackageManager.parseSource"
+      ],
+      "line_spans": [
+        {
+          "symbol": "DefaultPackageManager.install remove update",
+          "start_line": 134,
+          "end_line": 191,
+          "anchor": "async install(",
+          "content_sha256": "477ededbc26113ce100becd48ec384d76fac22a9d2ce6713531f00db2226306f"
+        },
+        {
+          "symbol": "DefaultPackageManager.parseSource",
+          "start_line": 272,
+          "end_line": 302,
+          "anchor": "private parseSource",
+          "content_sha256": "524be91287948327e2084ba21384386fb039273ba28a00e85f0e68cea36ca247"
+        }
+      ],
+      "blob_sha": "2bec5096f36caf72bb9d4841df27b717c7e881ce",
+      "content_sha256": "8a74cc891c4f422167509368ece7f2f5bca156434e74346bac76536cf67b347a"
+    },
+    {
+      "path": "packages/coding-agent/src/core/resource-loader.ts",
+      "relevance": "essential",
+      "relevance_score": 2,
+      "rationale": "Collects loaded extension registrations and errors, providing the existing conflict inspection boundary.",
+      "symbols": [
+        "DefaultResourceLoader.reload"
+      ],
+      "line_spans": [
+        {
+          "symbol": "DefaultResourceLoader.reload",
+          "start_line": 264,
+          "end_line": 283,
+          "anchor": "async reload()",
+          "content_sha256": "bd9fe07210f12230244a7899c887f324883484957f82185901e95dd1f2b0c1f6"
+        }
+      ],
+      "blob_sha": "a8be472bc88c7d286d48779733cfc97db5f02ba7",
+      "content_sha256": "aabd09c66e17b85ec30f789fb26ff098d590302211a15bb4671a89acf75acc87"
+    },
+    {
+      "path": "packages/coding-agent/src/main.ts",
+      "relevance": "essential",
+      "relevance_score": 2,
+      "rationale": "Owns CLI package-command presentation and error feedback.",
+      "symbols": [
+        "handlePackageCommand"
+      ],
+      "line_spans": [
+        {
+          "symbol": "handlePackageCommand",
+          "start_line": 126,
+          "end_line": 165,
+          "anchor": "async function handlePackageCommand",
+          "content_sha256": "408699acb69f13fb8ac8b85e1174d9480d6cfc87952454a786309b73c04fed45"
+        }
+      ],
+      "blob_sha": "6e75697f7f1e26bef78aca4453b7eaaafd2d162d",
+      "content_sha256": "c0e236f91a01ba1956e79ed3e6121dc39108bfd7eef51e5a6dceb6aa15bf2869"
+    },
+    {
+      "path": "packages/coding-agent/src/core/extensions/types.ts",
+      "relevance": "supporting",
+      "relevance_score": 1,
+      "rationale": "Unchanged Extension interface documents tool, command and flag registration maps.",
+      "symbols": [
+        "Extension"
+      ],
+      "line_spans": [
+        {
+          "symbol": "Extension",
+          "start_line": 987,
+          "end_line": 997,
+          "anchor": "export interface Extension",
+          "content_sha256": "a5f1dabf7e932982d49e02e1dee30d624544b982ffcbb962c47a1087c444ddf0"
+        }
+      ],
+      "blob_sha": "2a058160e8d0f2e9522aed549c8d8d8ed47e1e55",
+      "content_sha256": "bb5fd20f0b5ddb85ec9a72d20f4952cf81cff6e0f5f7bf1cece35d51ff2343af"
+    }
+  ],
+  "relevant_symbols": [
+    {
+      "path": "packages/coding-agent/src/core/package-manager.ts",
+      "symbol": "DefaultPackageManager.install remove update",
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/core/package-manager.ts",
+      "symbol": "DefaultPackageManager.parseSource",
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/core/resource-loader.ts",
+      "symbol": "DefaultResourceLoader.reload",
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/main.ts",
+      "symbol": "handlePackageCommand",
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/core/extensions/types.ts",
+      "symbol": "Extension",
+      "relevance": "supporting"
+    }
+  ],
+  "relevant_spans": [
+    {
+      "path": "packages/coding-agent/src/core/package-manager.ts",
+      "start_line": 134,
+      "end_line": 191,
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/core/package-manager.ts",
+      "start_line": 272,
+      "end_line": 302,
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/core/resource-loader.ts",
+      "start_line": 264,
+      "end_line": 283,
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/main.ts",
+      "start_line": 126,
+      "end_line": 165,
+      "relevance": "essential"
+    },
+    {
+      "path": "packages/coding-agent/src/core/extensions/types.ts",
+      "start_line": 987,
+      "end_line": 997,
+      "relevance": "supporting"
+    }
+  ],
+  "existing_tests": [],
+  "target_added_tests": [
+    "packages/coding-agent/test/package-manager.test.ts",
+    "packages/coding-agent/test/resource-loader.test.ts"
+  ],
+  "tests_modified_by_target": [],
+  "target_added_files_not_retrievable": [
+    "packages/coding-agent/test/fixtures/empty-agent/.gitkeep",
+    "packages/coding-agent/test/fixtures/empty-cwd/.gitkeep",
+    "packages/coding-agent/test/package-manager.test.ts",
+    "packages/coding-agent/test/resource-loader.test.ts"
+  ],
+  "test_availability": {
+    "execution_status": "not_executed",
+    "pre_existing": [],
+    "target_modified_test_files_note": "Only parent contents are retrieval eligible; later-added test cases are future evidence."
+  },
+  "annotation_notes": [
+    "Recommend reserve: mixed requirements and strong package-management overlap with pilot pi-002. Direct package-manager/resource-loader test files are introduced by this target.",
+    "AI-assisted T2 proposal. Structural checks are separate from pending human relevance review.",
+    "This annotation is tied to the T2 task prompt; do not silently mix it into pilot-v1.0 scoring."
+  ],
+  "unjudged_policy": "Unlisted files are unjudged; disclose any closed-world scoring convention and review additional useful evidence without method identity before freezing."
+}

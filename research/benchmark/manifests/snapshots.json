@@ -1,22 +1,21 @@
 {
-  "schema_version": "1.1",
-  "status": "verified_partial",
+  "schema_version": "1.2",
+  "status": "verified",
   "generated_at": "2026-11-19T02:39:46.879385+00:00",
   "pi_repo_path": "C:\\Users\\froze\\Desktop\\pi-upstream",
   "origin_url": "https://github.com/earendil-works/pi.git",
   "notes": [
     "Evaluator-side snapshot metadata only. Do not place target/parent SHAs in agent-visible task prompts.",
     "Git history is authoritative for commit identity.",
-    "Candidate E (pi_network_retry / 37067e0) could not be resolved in the fetched upstream history as of Stage 2.",
-    "Pilot worktrees are detached checkouts of verified parent SHAs."
+    "Pilot worktrees are detached checkouts of verified parent SHAs.",
+    "T2 cross-checked all eight original target/parent identities against GitHub and local Git. Candidate E was unresolved at Stage 2 and is now resolved without substitution.",
+    "The recorded worktree_path values are the original EXP locations. T2 prepare_worktrees.py --write-paths records verified machine-local paths without changing source identities."
   ],
   "summary": {
     "primary_total": 8,
-    "verified": 7,
-    "failed": 1,
-    "failed_task_ids": [
-      "pi_network_retry"
-    ]
+    "verified": 8,
+    "failed": 0,
+    "failed_task_ids": []
   },
   "snapshots": [
     {
@@ -107,20 +106,23 @@
       "task_id": "pi_network_retry",
       "letter_id": "E",
       "repository_url": "https://github.com/earendil-works/pi",
-      "target_sha": null,
-      "parent_sha": null,
-      "target_tree_sha": null,
-      "parent_tree_sha": null,
-      "target_commit_date": null,
-      "target_subject": null,
+      "target_sha": "37067e0166dbbcd9362797d84ab44c6f98e6cc40",
+      "parent_sha": "486066574ce7a11dc55d1296e2adf322c940526e",
+      "target_tree_sha": "af17e515c5abc63b1f4f0db7f9c389604fdb5d2a",
+      "parent_tree_sha": "e30c52157d7d9d9946678500603ae9e4b16e1483",
+      "target_commit_date": "2026-04-17",
+      "target_subject": "fix(coding-agent): retry connection lost errors",
       "expected_parent_prefix": "4860665",
-      "parent_prefix_verified": false,
-      "parent_list": [],
-      "verification_status": "verification_failed",
+      "parent_prefix_verified": true,
+      "parent_list": [
+        "486066574ce7a11dc55d1296e2adf322c940526e"
+      ],
+      "verification_status": "verified",
       "pilot_status": "candidate",
       "worktree_path": null,
-      "error": "target commit not found: 37067e0",
-      "target_input": "37067e0"
+      "error": null,
+      "target_input": "37067e0166dbbcd9362797d84ab44c6f98e6cc40",
+      "verification_note": "Original Candidate E resolved without substitution; GitHub and local Git agree."
     },
     {
       "task_id": "pi_rpc_context_statistics",

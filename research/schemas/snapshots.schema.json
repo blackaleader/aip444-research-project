@@ -4,21 +4,37 @@
   "title": "SnapshotsManifest",
   "description": "Evaluator-side snapshot manifest produced by scripts/verify_benchmark.py (Stage 2+). Failed candidates keep null SHAs and verification_failed status.",
   "type": "object",
-  "required": ["schema_version", "status", "snapshots"],
+  "required": [
+    "schema_version",
+    "status",
+    "snapshots"
+  ],
   "properties": {
-    "schema_version": { "type": "string" },
+    "schema_version": {
+      "type": "string"
+    },
     "status": {
       "type": "string",
       "description": "e.g. provisional_empty | verified_partial | verified"
     },
-    "generated_at": { "type": "string" },
-    "pi_repo_path": { "type": "string" },
-    "origin_url": { "type": "string" },
+    "generated_at": {
+      "type": "string"
+    },
+    "pi_repo_path": {
+      "type": "string"
+    },
+    "origin_url": {
+      "type": "string"
+    },
     "notes": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "summary": { "type": "object" },
+    "summary": {
+      "type": "object"
+    },
     "snapshots": {
       "type": "array",
       "items": {
@@ -33,30 +49,145 @@
           "pilot_status"
         ],
         "properties": {
-          "task_id": { "type": "string" },
-          "letter_id": { "type": "string" },
-          "repository_url": { "type": "string" },
-          "target_sha": { "type": ["string", "null"] },
-          "parent_sha": { "type": ["string", "null"] },
-          "target_tree_sha": { "type": ["string", "null"] },
-          "parent_tree_sha": { "type": ["string", "null"] },
-          "target_commit_date": { "type": ["string", "null"] },
-          "target_subject": { "type": ["string", "null"] },
-          "expected_parent_prefix": { "type": "string" },
-          "parent_prefix_verified": { "type": "boolean" },
+          "task_id": {
+            "type": "string"
+          },
+          "letter_id": {
+            "type": "string"
+          },
+          "repository_url": {
+            "type": "string"
+          },
+          "target_sha": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "parent_sha": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "target_tree_sha": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "parent_tree_sha": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "target_commit_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "target_subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expected_parent_prefix": {
+            "type": "string"
+          },
+          "parent_prefix_verified": {
+            "type": "boolean"
+          },
           "parent_list": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
           "verification_status": {
             "type": "string",
-            "enum": ["verified", "verification_failed", "pending", "unverified"]
+            "enum": [
+              "verified",
+              "verification_failed",
+              "pending",
+              "unverified"
+            ]
           },
-          "pilot_status": { "type": "string" },
-          "worktree_path": { "type": ["string", "null"] },
-          "error": { "type": ["string", "null"] },
-          "target_input": { "type": "string" }
-        }
+          "pilot_status": {
+            "type": "string"
+          },
+          "worktree_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "target_input": {
+            "type": "string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "verification_status": {
+                  "const": "verified"
+                }
+              },
+              "required": [
+                "verification_status"
+              ]
+            },
+            "then": {
+              "required": [
+                "target_sha",
+                "parent_sha",
+                "target_tree_sha",
+                "parent_tree_sha",
+                "parent_list"
+              ],
+              "properties": {
+                "target_sha": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "parent_sha": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "target_tree_sha": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "parent_tree_sha": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "parent_list": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$"
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     }
   }
