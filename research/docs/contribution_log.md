@@ -28,6 +28,7 @@
 | 2026-11-19 | EXP | *(fill name)* | Stage 5: corpus scan/chunking, OpenRouter embeddings, NumPy indexes, shared retriever | `src/repo_search/{corpus_*,chunking,embeddings,vector_index,retriever}.py`, `docs/corpus_and_retrieval.md`, Stage 5 tests | *(fill)* |
 | 2026-11-19 | EXP | *(fill name)* | Stage 6: Method A/B, tools, OpenRouter chat, orchestration, traces | `method_a/b.py`, `repo_tools.py`, `chat_client.py`, `orchestrator.py`, `docs/methods_stage6.md` | *(fill)* |
 | 2026-11-24 | T3 | Arman Ataeipour | T3 integration/validation: independent 8/8 snapshot re-verification on a second machine, pilot worktree creation, offline benchmark/GT validation, exact deterministic corpus reproduction (14,964 + 3,992 chunks), method-compliance inspection, PR #2 audit; pilot documented as blocked on `OPENROUTER_API_KEY` (no runs executed, none fabricated) | `docs/handoff_t3_pilot.md`, `docs/handoff_t3_main_experiment.md` | *(fill)* |
+| 2026-11-24 | T3 | Arman Ataeipour | Stage 7 pilot executed live: embedding/chat probes passed, both pilot indexes built and validated, **12/12 runs completed (6 matched pairs, zero failures)** under frozen `pilot-v1.0` (single config hash); minimal file-level evaluator added; preliminary results computed against both GT sets separately (mixed outcome — neither method dominates; ~$0.13 total API cost) | `scripts/evaluate_pilot.py`, traces `results/raw/traces/` (local, gitignored), `results/processed/pilot_eval.json` (local), updated handoff docs | *(fill)* |
 
 ---
 

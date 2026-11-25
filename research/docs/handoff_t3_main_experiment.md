@@ -2,20 +2,27 @@
 
 **Author:** Arman Ataeipour · **Date:** 2026-11-24 · **Branch:** `t3/experiment-integration`
 
-## Status: BLOCKED — not executed, nothing fabricated
+## Status: BLOCKED on team decisions — not executed, nothing fabricated
 
-No main-experiment runs exist. This document records readiness, the blockers,
-and the frozen plan so execution can start without re-deriving anything.
+No main-experiment runs exist. The pilot is now **complete** (12/12 runs,
+2026-11-24 — see `docs/handoff_t3_pilot.md` §4), so the machinery blocker is
+cleared; the pilot surfaced no protocol defects requiring a new version.
+What remains is decisions, not infrastructure.
 
-## Blockers (in order)
+## Remaining blockers
 
-1. **Pilot must run first** (`docs/handoff_t3_pilot.md` §4) — itself blocked
-   only on `OPENROUTER_API_KEY`. The pilot may surface protocol issues that
-   need a documented new protocol version before main runs.
-2. **Human relevance review of ground truth** — all 8 T2-annotated tasks are
-   structurally valid but `pending_student_and_peer_review`. Main-run results
-   depend on T1's review; running before it is possible but the benchmark
-   version used must be frozen and labeled as not-yet-T1-reviewed.
+1. **Task-set selection and freeze (team decision):** choose ≥4 of the 8
+   verified tasks, resolve the C/D overlap question, and version-label the
+   selection (e.g. `main-v1.0`).
+2. **Ground-truth status decision:** all 8 tasks' GT is structurally valid but
+   `pending_student_and_peer_review`. Either T1 reviews before main runs, or
+   the team explicitly agrees to run against a frozen, labeled
+   not-yet-reviewed GT version (results would then be re-evaluable after
+   review; versions must never be mixed).
+3. **Worktrees + indexes for the selected non-pilot tasks** (mechanical,
+   ~minutes of setup + ~$0.10–0.30 embedding cost per snapshot;
+   `prepare_worktrees.py --all` is validated, `build_corpus_indexes.py`
+   needs its documented small extension to build non-pilot candidates).
 
 ## Benchmark readiness (verified 2026-11-24, this machine)
 

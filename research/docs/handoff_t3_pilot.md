@@ -20,8 +20,8 @@ below is claimed beyond what was actually executed.
 | T2 context-engineering contribution present | **Yes** | Merged via PR #1 (`t2/context-engineering`): 8-task set `benchmark/task_sets/t2_context_v1.json`, ground truth `benchmark/ground_truth/t2_context_v1/`, reviews under `benchmark/reviews/t2_context_v1/`, `scripts/prepare_worktrees.py`, `scripts/validate_benchmark.py` |
 | T2's separate RAG implementation | **Not present** (consistent with "will not be delivered") — Stage 5 retriever is the only retrieval backend in the repo |
 | T0 Stage 5 retrieval is the canonical baseline | **Yes** | `retriever.py` / `embeddings.py` / `vector_index.py` unchanged on `main`; no competing implementation exists |
-| Experiment runs exist | **No** | `results/raw/` empty; `results/findings.md` has no results — no pilot or main runs have ever been executed |
-| Evaluator (file-level P/R/F1) exists | **No** | No `scripts/evaluate.py` or equivalent; evaluation tooling was planned for Stage 7+ and has not been built. Noted for T1's evaluation work (§8) |
+| Experiment runs exist | **Yes (as of this delivery)** | At inspection time `results/raw/` was empty — no runs had ever been executed. The 12 pilot runs were then executed as part of this T3 work (§4) |
+| Evaluator (file-level P/R/F1) exists | **Added in this delivery** | No evaluator existed; `scripts/evaluate_pilot.py` added as a minimal T3 computation. T1's independent evaluation remains authoritative (§8) |
 
 ### Method compliance (code inspection)
 
@@ -104,57 +104,87 @@ re-run `--write-paths` locally before building indexes or running methods.
 
 ---
 
-## 4. Pilot status: **BLOCKED — one missing input (API key)**
+## 4. Pilot status: **EXECUTED — 12/12 runs completed (2026-11-24)**
 
 Per the frozen protocol: 2 tasks × 2 methods × 3 repetitions = **12 runs / 6
 matched pairs**, evidence budget 6,000 tokens, top-k 10, Method B limit 5 tool
 calls, temperature 0, primary model `openai/gpt-6-luna`, prompt
 `pilot-v1.0-agent-system-1`.
 
-**Zero pilot runs have been executed. No run records exist.** Nothing was
-fabricated.
+After an API key was provided, the full prerequisite chain was completed live
+on this machine: embedding probe passed (1536 dims, correct model), both
+indexes built (`idx-bfa6862400d0-…`, `idx-dd838d0fe09d-…`), index smoke
+validation passed, chat probe returned `openai/gpt-6-luna` live.
 
-Everything is staged except one item:
+### Run record
 
-| Prerequisite | Status |
-|---|---|
-| Verified snapshots + worktrees | ✅ done (§3) |
-| Deterministic chunk corpus | ✅ done (§3) |
-| Method/orchestration code validated | ✅ done (§1, §3 tests) |
-| Embedded NumPy indexes (`vectors.npy`) | ❌ **blocked** — embedding build requires `OPENROUTER_API_KEY`; no key exists on this machine (`research/.env` absent) |
-| Method B chat runs | ❌ **blocked** — same missing key |
+- **12 of 12 runs completed, exit 0; zero failures, zero retries, zero
+  fabrications.** All 6 matched pairs complete.
+- All 12 traces share one config hash (`46b0be2d77a99062`) — identical frozen
+  configuration; each task used its own correct snapshot index.
+- Protocol compliance observed in traces: Method A exactly 1 tool call and
+  `stop=completed` in all 6 runs with identical evidence packs per task
+  (deterministic, as designed); Method B used 4–5 tool calls (never >5), stop
+  reasons `evidence_budget_exhausted` ×2, `evidence_sufficient` ×2,
+  `call_limit_reached` ×2; evidence budgets never exceeded 6,000 tokens.
+- Resource use: Method A mean latency ~0.1 s, 0 planning tokens; Method B mean
+  latency ~4.3 s, planning tokens 2,192–7,671 per run. Total API spend for the
+  entire session (probes + indexing + 12 runs) ≈ **$0.13 USD**.
+- Traces: `results/raw/traces/{task}__r{rep}__{method}.json` + `runs.jsonl`
+  (gitignored; preserved locally, share with T1 out-of-band).
 
-### Exact procedure to run the pilot once a key is available
+### Preliminary file-level results (T3 computation; T1's independent evaluation is authoritative)
+
+Computed with `scripts/evaluate_pilot.py` from the actual traces, against each
+ground-truth set **separately** (both sets currently
+`preliminary_self_validated`; output: `results/processed/pilot_eval.json`).
+
+Mean over 3 repetitions, **preliminary (EXP) GT set**:
+
+| Task | Method | Precision | Recall | F1 |
+|---|---|---|---|---|
+| `pi_lazy_extension_loading` | A (one-shot) | 0.167 | 0.333 | 0.222 |
+| `pi_lazy_extension_loading` | B (agent) | 0.444 | 0.333 | **0.315** |
+| `pi_package_filtering` | A (one-shot) | 0.667 | 0.400 | **0.500** |
+| `pi_package_filtering` | B (agent) | 0.462 | 0.400 | 0.406 |
+
+Matched-pair F1 differences (B − A), preliminary GT: `+0.000, +0.000, +0.278`
+(lazy r1–r3); `−0.214, +0.100, −0.167` (packages r1–r3). The
+`t2_context_v1` GT set gives the same qualitative picture (B better on lazy,
+A better or equal on packages).
+
+**Honest interpretation (exploratory only, n=2 tasks):** neither method
+dominates. Method B beat Method A on the lazy-extension task (higher precision;
+one rep stopped early with a single highly relevant file), while Method A was
+better on the package-filtering task, where Method B's extra searches added
+false-positive files. Method B is also ~40× slower and spends thousands of
+planning tokens per run. No statistical significance is claimed or claimable
+from 6 pairs.
+
+### Reproduction
 
 ```powershell
-cd research
-.\.venv\Scripts\activate
-# 1. Create .env from .env.example; set OPENROUTER_API_KEY (+ PI_REPO_PATH)
-# 2. Point the manifest at local worktrees (machine-local, do not commit):
+cd research; .\.venv\Scripts\activate
+# .env: OPENROUTER_API_KEY + PI_REPO_PATH   (never commit)
 python scripts/prepare_worktrees.py --repo-path <pi-clone> --worktree-root <root> --write-paths
-# 3. Build embedded indexes (one-time; cached):
-python scripts/probe_openrouter_embeddings.py
 python scripts/build_corpus_indexes.py
 python scripts/validate_stage5_indexes.py
-# 4. The 12 pilot runs (order: per task, per repetition, A then B):
-#    for task in pi_lazy_extension_loading, pi_package_filtering:
-#      for rep in 1..3:
+# 12 runs: per task, per rep 1..3, A then B:
 python scripts/run_method_a.py --task-id <task> --repetition <rep>
 python scripts/run_method_b.py --task-id <task> --repetition <rep>
-# Traces persist under results/raw/ (gitignored; preserve and share out-of-band)
+python scripts/evaluate_pilot.py --output results/processed/pilot_eval.json
 ```
-
-Failed or incomplete runs must be kept and recorded, not silently retried.
 
 ---
 
 ## 5. Main experiment readiness
 
-See `docs/handoff_t3_main_experiment.md`. Summary: **blocked** behind the pilot
-(same key blocker), but the benchmark is closer to main-ready than older docs
-state — 8/8 snapshots verified and structurally validated ground truth exists
-for all 8 tasks. Human relevance review of T2's annotations is the open
-validation item for T1.
+See `docs/handoff_t3_main_experiment.md`. Summary: the pilot blocker is now
+cleared; main execution remains **blocked on team decisions**, not machinery —
+task-set selection (≥4 of the 8 verified tasks, C/D overlap decision) and
+ground-truth human review / version freeze. The benchmark itself is main-ready
+on the structural level: 8/8 snapshots verified, structurally validated GT for
+all 8 tasks.
 
 ---
 
@@ -178,7 +208,9 @@ made at any point in this validation (no key available).
 | Pilot worktrees (detached, clean, pinned parents) | local `<worktree-root>/<task_id>` | No |
 | Chunk manifests + scan reports | `research/artifacts/indexes/<sha12>/` | No (gitignored, reproducible) |
 | Validation outputs (verify/validate/corpus) | summarized in this doc §3 | This doc |
-| Run records / traces | none exist yet | — |
+| Embedded indexes (`vectors.npy`, `chunks.json`, `meta.json`) | `research/artifacts/indexes/{bfa6862400d0,dd838d0fe09d}/` | No (gitignored, reproducible) |
+| 12 run traces + `runs.jsonl` | `research/results/raw/traces/` | No (gitignored; preserve locally, deliver to T1 out-of-band) |
+| Pilot evaluation output | `research/results/processed/pilot_eval.json` | No (gitignored; regenerate via `evaluate_pilot.py`) |
 
 ---
 
