@@ -27,6 +27,7 @@
 | 2026-11-18 | EXP | *(fill name)* | Stage 4: freeze pilot-v1.0 protocol, accounting, metrics, config tests | `config/experiment.yaml`, `docs/protocol_freeze.md`, `protocol_config.py`, Stage 4 tests | *(fill)* |
 | 2026-11-19 | EXP | *(fill name)* | Stage 5: corpus scan/chunking, OpenRouter embeddings, NumPy indexes, shared retriever | `src/repo_search/{corpus_*,chunking,embeddings,vector_index,retriever}.py`, `docs/corpus_and_retrieval.md`, Stage 5 tests | *(fill)* |
 | 2026-11-19 | EXP | *(fill name)* | Stage 6: Method A/B, tools, OpenRouter chat, orchestration, traces | `method_a/b.py`, `repo_tools.py`, `chat_client.py`, `orchestrator.py`, `docs/methods_stage6.md` | *(fill)* |
+| 2026-11-24 | T3 | Arman Ataeipour | T3 integration/validation: independent 8/8 snapshot re-verification on a second machine, pilot worktree creation, offline benchmark/GT validation, exact deterministic corpus reproduction (14,964 + 3,992 chunks), method-compliance inspection, PR #2 audit; pilot documented as blocked on `OPENROUTER_API_KEY` (no runs executed, none fabricated) | `docs/handoff_t3_pilot.md`, `docs/handoff_t3_main_experiment.md` | *(fill)* |
 
 ---
 
