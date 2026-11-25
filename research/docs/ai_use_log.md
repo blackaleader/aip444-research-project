@@ -13,6 +13,8 @@
 | 2026-11-18 | Cursor agent (Composer) | 4 | Freeze pilot-v1.0 protocol; config + tests | Author reviews freeze vs Stage 3 artifacts | Pending review | Design freeze only; no trials |
 | 2026-11-19 | Cursor agent (Composer) | 5 | Corpus, OpenRouter embeddings, NumPy index, shared retriever | Author reviews code/docs; set API key for live probe | Pending review | Live API pending without key; no Method A/B |
 | 2026-11-19 | Cursor agent (Composer) | 6 | Method A/B, chat client, orchestration, tests | Author reviews before pilot runs | Pending review | No 12-record pilot batch executed |
+| 2026-11-24 | Claude Code (Claude Fable 5) | T3 | Repo inspection, snapshot/benchmark re-verification, worktree + corpus validation, T3 handoff docs | Author (Arman Ataeipour) reviews docs and validation evidence before merge | Pending review | 99 passed/2 skipped on main; no live API calls (no key); no pilot runs executed; frozen protocol untouched |
+| 2026-11-24 | Claude Code (Claude Fable 5) | T3 / Stage 7 | Executed pilot after key provided: index builds, 12/12 method runs, minimal evaluator, results write-up | Author (Arman Ataeipour) reviews traces, evaluator code, and reported numbers before merge | Pending review | All runs real (`gpt-6-luna`, single config hash, ~$0.13 API spend); no retries or substitutions; frozen protocol untouched |
 
 ---
 
